@@ -1,0 +1,11 @@
+/* this is the Twee-fi css file */
+/* Move down content because we have a fixed navbar that is 3.5rem tall */
+body {
+  padding-top: 3.5rem;
+}
+
+.starter-bar {
+  padding: 2rem .5rem;
+  text-align: center;
+  background-color: #d9bbff;
+}
