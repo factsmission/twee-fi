@@ -16,3 +16,28 @@ body {
   min-width: 7rem;
   background-color: papayawhip;
 }
+
+.fa-star {
+  font-size: 2rem;
+  color: #F5E647;
+}
+
+.fa-star-o {
+  font-size: 2rem;
+  color: #F5E647;
+}
+
+.fa-trash-o {
+  font-size: 2rem;
+  color: grey;
+}
+
+.rating-clear {
+  opacity: .3;
+  transition:opacity 0.8s linear;
+}
+
+.rating-clear:hover {
+  opacity: 1;
+  
+}

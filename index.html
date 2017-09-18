@@ -9,6 +9,7 @@
   <link href='https://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css' />
   
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+  <link href="http://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
   <link rel="stylesheet" href="css/twee-fi.css" >
 </head>
   <body>
@@ -50,7 +51,7 @@
       <div class="tab-content" id="nav-tabContent">
         <!-- ldp setup -->
         <div class="tab-pane fade show active" id="setup-ldp-tab" role="tabpanel" aria-labelledby="nav-home-tab">
-          <div class="tab-header mt-4">
+          <div class="tab-header mt-4 mb-4">
               <h4>Enter your LDP-URI</h4>
             </div>
           <div class="form-group">
@@ -61,44 +62,40 @@
         </div>
         <!-- select tweet -->
         <div class="tab-pane fade" id="select-tweet-tab" role="tabpanel" aria-labelledby="select-tweet-tab">
-          <div class="tab-header mt-4">
+          <div class="tab-header mt-4 mb-4">
             <h4>Enter the Tweet you want to <a href="https://schema.org/ClaimReview" target="_blank">ClaimReview</a>. Then click "Check this Tweet" to check your URL.</h4>
           </div>
           <form>
             <div class="form-group">
-              <label for="check-tweet">Email address</label>
-              <input type="email" class="form-control" id="check-tweet" aria-describedby="check tweet" placeholder="https://twitter.com/<twitteruser>/status/<long number>">
+              <label for="check-tweet">Tweet URL:</label>
+              <input type="text" class="form-control" id="check-tweet" aria-describedby="check tweet" placeholder="https://twitter.com/<twitteruser>/status/<long number>">
               <small id="check tweet" class="form-text text-muted">All tweet urls have the word "status" in them.</small>
             </div>
             <button type="submit" class="btn btn-primary">Check this Tweet</button>
             <div class="retrived-tweet">
-
+              <a href="https://publish.twitter.com/oembed?url=https://twitter.com/BobWalsh/status/905105767505821697"></a>
             </div>
           </form>
+          
         </div>
         <!-- create ClaimReview -->
         <div class="tab-pane fade" id="create-claim-review-tab" role="tabpanel" aria-labelledby="create-claim-review-tab">
             <div class="create-claim-container">
-              <div class="tab-header mt-4">
+              <div class="tab-header mt-4 mb-4">
                 <h4>Use this form to create a <a href="https://schema.org/ClaimReview" target="_blank">ClaimReview</a>.</h4>
               </div>
               <form>
                 <div class="form-group">
-                  <label for="check-tweet">Email address</label>
-                  <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-                  <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                  <label for="check-tweet">Summarize what the Tweet Claimed</label>
+                  <textarea id="claim_reviewed" rows="3" class="form-control" aria-describedby="Claim you are reviewing" placeholder="Claim made in Tweet"></textarea>
+                  <small id="claim_reviewedHelp" class="form-text text-muted">What does the tweet claim?</small>
                 </div>
                 <div class="form-group">
-                  <label for="exampleInputPassword1">Password</label>
-                  <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                  <label for="check-tweet">Rate the truthfulness of the Claim:</label>
+                  <input type="number" name="your_awesome_parameter" id="rating-custom-icons" class="rating" data-clearable="reset rating" data-icon-lib="fa" data-active-icon="fa-star" data-inactive-icon="fa-star-o" data-clearable-icon="fa-trash-o" value="1" data-inline/>
                 </div>
-                <div class="form-check">
-                  <label class="form-check-label">
-                    <input type="checkbox" class="form-check-input">
-                    Check me out
-                  </label>
-                </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
+                
+                <button type="submit" class="btn btn-primary">Create ClaimReview</button>
               </form>
             </div>
         </div>
@@ -121,6 +118,9 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js" integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js" integrity="sha384-h0AbiXch4ZDo7tp9hKZ4TsHbi047NrKGLO3SEJAg45jXxnGIfYzk4Si90RDIqNm1" crossorigin="anonymous"></script>
+    <!-- UX components -->
+    <script src="js/bootstrap-rating-input.js"></script>
+    <script src="js/twee-fi.js"></script>
     <!-- solid components -->
     <script src="https://solid.github.io/releases/rdflib.js/rdflib-0.12.2.min.js"></script>
     <script src="https://solid.github.io/releases/solid.js/solid-0.14.1.min.js"></script>
