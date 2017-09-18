@@ -32,33 +32,84 @@
       <div class="starter-bar">
         <h1 class="display-4">Twee-Fi Milestone 1</h1>
         <p class="lead">1 sentence description of Twee-fi (more in about)<br>1 sentence description of this Milestone</p>
-        <button type="button" disabled class="btn btn-info">0. Setup</button>
-        <button type="button" class="btn btn-primary">1. Create a ReviewClaim</button>
-        <button type="button" disabled class="btn btn-secondary">2. Edit a ReviewClaim</button>
+        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+          <li class="nav-item">
+            <a class="nav-link active" id="setup-tab" data-toggle="pill" href="#setup-ldp-tab" role="tab" aria-controls="setup-ldp" aria-expanded="true">Select LDP-URI </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="select-tweet" data-toggle="pill" href="#select-tweet-tab" role="tab" aria-controls="pills-profile" aria-expanded="true">Pick Tweet</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="create-claim-review" data-toggle="pill" href="#create-claim-review-tab" role="tab" aria-controls="pills-profile" aria-expanded="true">Create ClaimReviews</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" id="edit-claim-review" data-toggle="pill" href="#edit-claim-review-tab" role="tab" aria-controls="pills-profile" aria-expanded="true">Edit ClaimReviews</a>
+          </li>
+        </ul>
       </div>
-      <div class="create-claim-container">
-        <div class="create-form-header-area mt-2">
-          <h3>Use this form to create a <a href="https://schema.org/ClaimReview" target="_blank">ClaimReview</a>.</h3>
+      <div class="tab-content" id="nav-tabContent">
+        <!-- ldp setup -->
+        <div class="tab-pane fade show active" id="setup-ldp-tab" role="tabpanel" aria-labelledby="nav-home-tab">
+          <div class="tab-header mt-4">
+              <h4>Enter your LDP-URI</h4>
+            </div>
+          <div class="form-group">
+              <label for="ldp-uri">LDP-URI</label>
+              <input type="text" class="form-control" id="ldp-uri" aria-describedby="ldp uri" disabled placeholder="https://farewellutopia.com:8443/">
+              <small id="ldp-uri-help" class="form-text text-muted">It should look similar to: https://farewellutopia.com:8443/</small>
+            </div>
         </div>
-        <form>
-          <div class="form-group">
-            <label for="exampleInputEmail1">Email address</label>
-            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
-            <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+        <!-- select tweet -->
+        <div class="tab-pane fade" id="select-tweet-tab" role="tabpanel" aria-labelledby="select-tweet-tab">
+          <div class="tab-header mt-4">
+            <h4>Enter the Tweet you want to <a href="https://schema.org/ClaimReview" target="_blank">ClaimReview</a>. Then click "Check this Tweet" to check your URL.</h4>
           </div>
-          <div class="form-group">
-            <label for="exampleInputPassword1">Password</label>
-            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-          </div>
-          <div class="form-check">
-            <label class="form-check-label">
-              <input type="checkbox" class="form-check-input">
-              Check me out
-            </label>
-          </div>
-          <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+          <form>
+            <div class="form-group">
+              <label for="check-tweet">Email address</label>
+              <input type="email" class="form-control" id="check-tweet" aria-describedby="check tweet" placeholder="https://twitter.com/<twitteruser>/status/<long number>">
+              <small id="check tweet" class="form-text text-muted">All tweet urls have the word "status" in them.</small>
+            </div>
+            <button type="submit" class="btn btn-primary">Check this Tweet</button>
+            <div class="retrived-tweet">
+
+            </div>
+          </form>
+        </div>
+        <!-- create ClaimReview -->
+        <div class="tab-pane fade" id="create-claim-review-tab" role="tabpanel" aria-labelledby="create-claim-review-tab">
+            <div class="create-claim-container">
+              <div class="tab-header mt-4">
+                <h4>Use this form to create a <a href="https://schema.org/ClaimReview" target="_blank">ClaimReview</a>.</h4>
+              </div>
+              <form>
+                <div class="form-group">
+                  <label for="check-tweet">Email address</label>
+                  <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Enter email">
+                  <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                </div>
+                <div class="form-group">
+                  <label for="exampleInputPassword1">Password</label>
+                  <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                </div>
+                <div class="form-check">
+                  <label class="form-check-label">
+                    <input type="checkbox" class="form-check-input">
+                    Check me out
+                  </label>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+              </form>
+            </div>
+        </div>
+        <!-- edit ClaimReview -->
+        <div class="tab-pane fade" id="edit-claim-review-tab" role="tabpanel" aria-labelledby="edit-claim-review-tab">
+          <p class="muted">This is where you see your ClaimReviews, and can edit them.</p>
       </div>
+
+      </div>
+
+      
     </div>
     <nav class="navbar fixed-bottom navbar-light bg-light">
         <span class="navbar-text">
