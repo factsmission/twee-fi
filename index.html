@@ -65,17 +65,15 @@
           <div class="tab-header mt-4 mb-4">
             <h4>Enter the Tweet you want to <a href="https://schema.org/ClaimReview" target="_blank">ClaimReview</a>. Then click "Check this Tweet" to check your URL.</h4>
           </div>
-          <form>
+          
             <div class="form-group">
               <label for="check-tweet">Tweet URL:</label>
-              <input type="text" class="form-control" id="check-tweet" aria-describedby="check tweet" placeholder="https://twitter.com/<twitteruser>/status/<long number>">
-              <small id="check tweet" class="form-text text-muted">All tweet urls have the word "status" in them.</small>
+              <input type="text" class="form-control" id="tweet_url" aria-describedby="check tweet" placeholder="https://twitter.com/<twitteruser>/status/<long number>">
+              <small  class="form-text text-muted">All tweet urls have the word "status" in them.</small>
             </div>
-            <button type="submit" class="btn btn-primary">Check this Tweet</button>
-            <div class="retrived-tweet">
-              <a href="https://publish.twitter.com/oembed?url=https://twitter.com/BobWalsh/status/905105767505821697"></a>
-            </div>
-          </form>
+            <button id="check_tweet" class="btn btn-primary">Check this Tweet</button>
+            <p class="mt-3" ><span id="tweet-valid" class="text-success fade hide">Your Tweet URL appears valid!</span>
+            <span id="tweet-invalid" class="text-danger fade hide">Your Tweet URL does not appear valid!</span></p>
           
         </div>
         <!-- create ClaimReview -->
