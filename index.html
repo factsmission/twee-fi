@@ -76,7 +76,6 @@
               <span id="tweet-valid" class="text-success fade hide">Your Tweet URL appears valid!</span>
               <span id="tweet-invalid" class="text-danger fade hide">Your Tweet URL does not appear valid!</span>
             </p>
-          
         </div>
         <!-- create ClaimReview -->
         <div class="tab-pane fade" id="create-claim-review-tab" role="tabpanel" aria-labelledby="create-claim-review-tab">
@@ -92,11 +91,37 @@
                 </div>
                 <div class="form-group">
                   <label for="check-tweet">Rate the truthfulness of the Claim:</label>
-                  <input type="number"  id="rating-in-stars" class="rating" data-clearable="reset rating" data-icon-lib="fa" data-active-icon="fa-star" data-inactive-icon="fa-star-o" data-clearable-icon="fa-trash-o" value="1" data-inline/>
+                  <input type="number"  id="rating-in-stars" class="rating" data-clearable="reset rating" data-icon-lib="fa" data-active-icon="fa-star" data-inactive-icon="fa-star-o" data-clearable-icon="fa-trash-o" value="0" data-inline/>
                 </div>
                 
                 <button id="submit_claim" class="btn btn-primary">Create ClaimReview</button>
+
               </form>
+              <h6 class="mt-4">ClaimReview Status:</h6>
+              <div class="row">
+                <div class="col-4 mt-3 custom-controls-stacked">
+                  <label id="valcheck_1" class="custom-control custom-checkbox">
+                    <input id="valcheck_1_ck" type="checkbox" class="custom-control-input">
+                    <span class="custom-control-indicator"></span>
+                    <span id="valcheck_1_msg" class="custom-control-description">LDP-URI defined.</span>
+                  </label>
+                  <label id="valcheck_2" class="custom-control custom-checkbox">
+                    <input id="valcheck_2_ck" type="checkbox" class="custom-control-input">
+                    <span class="custom-control-indicator"></span>
+                    <span id="valcheck_2_msg" class="custom-control-description">Tweet defined.</span>
+                  </label>
+                  <label  id="valcheck_3" class="custom-control custom-checkbox">
+                    <input id="valcheck_3_ck" type="checkbox" class="custom-control-input">
+                    <span class="custom-control-indicator"></span>
+                    <span id="valcheck_3_msg" class="custom-control-description">Claim summarized.</span>
+                  </label>
+                  <label  id="valcheck_4" class="custom-control custom-checkbox">
+                    <input id="valcheck_4_ck" type="checkbox" class="custom-control-input">
+                    <span class="custom-control-indicator"></span>
+                    <span id="valcheck_4_msg" class="custom-control-description">Claim rated.</span>
+                  </label>
+                </div>
+              </div>
               <textarea id="claimreview_text" class="fade hide" rows="6" class="form-control" aria-describedby="ClaimReview" placeholder="ClaimReview"></textarea>
               
 

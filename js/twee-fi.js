@@ -1,7 +1,15 @@
 $(function(){
+  $('[data-toggle="tooltip"]').tooltip();
   $('#tweet_url').on('change keyup paste', function(){
     $("#tweet-valid").removeClass("show").addClass("hide");
     $("#tweet-invalid").removeClass("show").addClass("hide");
+    CheckData();
+  });
+  $('#claim_reviewed, #ldp-uri').on('change keyup paste', function(){
+    CheckData();
+  });
+  $('#rating-in-stars').on('change', function(){
+    CheckData();
   });
 
   $('#check_tweet').on('click',function(){
@@ -16,6 +24,48 @@ $(function(){
     }
   });
 
+  function CheckData() {
+    const LDP_neg_msg = "Missing LDP-URI.";
+    const Tweet_url_neg_msg = "Missing Tweet URL.";
+    const Claim_neg_msg = "Missing Claim made in Tweet.";
+    const Rating_neg_msg = "Missing Rating.";
+    const LDP_msg = "LDP-URI appears valid";
+    const Tweet_url_msg = "Tweet URL appears valid";
+    const Claim_msg = "Claim in Tweet described.";
+    const Rating_msg = "Claim Rated.";
+    
+    if ($('#ldp-uri').val() == false) {
+      $('#valcheck_1_msg').text(LDP_neg_msg);
+      $('#valcheck_1_ck').prop('checked', false);
+    } else {
+      $('#valcheck_1_msg').text(LDP_msg);
+      $('#valcheck_1_ck').prop('checked', true);
+    }
+    if ($('#tweet_url').val() == false) {
+      $('#valcheck_2_msg').text(Tweet_url_neg_msg);
+      $('#valcheck_2_ck').prop('checked', false);
+    } else {
+      $('#valcheck_2_msg').text(Tweet_url_msg);
+      $('#valcheck_2_ck').prop('checked', true);
+    }
+    if ($('#claim_reviewed').val() == false) {
+      $('#valcheck_3_msg').text(Claim_neg_msg);
+      $('#valcheck_3_ck').prop('checked', false);
+    } else {
+      $('#valcheck_3_msg').text(Claim_msg);
+      $('#valcheck_3_ck').prop('checked', true);
+    }
+    if ($('#rating-in-stars').val() == 0) {
+      $('#valcheck_4_msg').text(Rating_neg_msg);
+      $('#valcheck_4_ck').prop('checked', false);
+    } else {
+      $('#valcheck_4_msg').text(Rating_msg);
+      $('#valcheck_4_ck').prop('checked', true);
+    }
+    
+
+
+  };
 
   $('#submit_claim').on('click',function(event){
     // do validations
