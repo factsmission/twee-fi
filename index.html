@@ -94,12 +94,12 @@
                   <input type="number"  id="rating-in-stars" class="rating" data-clearable="reset rating" data-icon-lib="fa" data-active-icon="fa-star" data-inactive-icon="fa-star-o" data-clearable-icon="fa-trash-o" value="0" data-inline/>
                 </div>
                 
-                <button id="submit_claim" class="btn btn-primary">Create ClaimReview</button>
+                <button id="submit_claim" disabled class="btn btn-primary">Create ClaimReview</button>
 
               </form>
-              <h6 class="mt-4">ClaimReview Status:</h6>
+              <h6 class="mt-4 text-uppercase text-underline">ClaimReview Status:</h6>
               <div class="row">
-                <div class="col-4 mt-3 custom-controls-stacked">
+                <div class="col-5 mt-1 custom-controls-stacked">
                   <label id="valcheck_1" class="custom-control custom-checkbox">
                     <input id="valcheck_1_ck" type="checkbox" class="custom-control-input">
                     <span class="custom-control-indicator"></span>
@@ -121,11 +121,13 @@
                     <span id="valcheck_4_msg" class="custom-control-description">Claim rated.</span>
                   </label>
                 </div>
+                <div class="col-7">
+                    <textarea id="claimreview_text" class="col-12" rows="6" class="form-control" aria-describedby="ClaimReview" placeholder="ClaimReview"></textarea>
+        
+                </div>
               </div>
-              <textarea id="claimreview_text" class="fade hide" rows="6" class="form-control" aria-describedby="ClaimReview" placeholder="ClaimReview"></textarea>
-              
-
             </div>
+            
         </div>
         <!-- edit ClaimReview -->
         <div class="tab-pane fade" id="edit-claim-review-tab" role="tabpanel" aria-labelledby="edit-claim-review-tab">

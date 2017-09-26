@@ -62,9 +62,11 @@ $(function(){
       $('#valcheck_4_msg').text(Rating_msg);
       $('#valcheck_4_ck').prop('checked', true);
     }
-    
-
-
+    if ($('#valcheck_1_ck').prop('checked') && $('#valcheck_2_ck').prop('checked') && $('#valcheck_3_ck').prop('checked') && $('#valcheck_4_ck').prop('checked')) {
+      $('#submit_claim').prop("disabled",false);
+    } else {
+      $('#submit_claim').prop("disabled",true)
+    }
   };
 
   $('#submit_claim').on('click',function(event){
@@ -120,8 +122,8 @@ $(function(){
     graph.add(claimReview, schema("url"), $rdf.sym(thetweet));
     var data = new $rdf.Serializer(graph, $rdf.sym("https://twitter.com/")).setBase("http://review.local/").toN3(graph);
     console.log(data);
-    $('claimreview_text').val(data);
-    $('claimreview_text').addClass('show').removeClass('hide');
+    $('#claimreview_text').val(data);
+    $('#claimreview_text').addClass('show').removeClass('hide');
   });
 
 });
