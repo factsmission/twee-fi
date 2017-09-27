@@ -1,4 +1,15 @@
+
+var solid = require('solid');
+
 $(function(){
+   // Bin structure
+  var bin = {
+    url: '',
+    title: '',
+    body: ''
+  };
+
+
   $('[data-toggle="tooltip"]').tooltip();
   $('#tweet_url').on('change keyup paste', function(){
     $("#tweet-valid").removeClass("show").addClass("hide");
@@ -69,8 +80,24 @@ $(function(){
     }
   };
 
+  
+  $('#pop_claim').on('click',function(event){
+    event.preventDefault();
+    event.stopPropagation();
+    $('#ldp-uri').val("https://farewellutopia.com:8443/");
+    $('#tweet_url').val("https://twitter.com/wesbos/status/912736261630251008");
+    $('#claim_reviewed').val("That Facebook has decided to relicense React & Friends to MIT.");
+    
+    $('#create-claim-review').trigger('click');
+  });
+
+
+
   $('#submit_claim').on('click',function(event){
     // do validations
+    event.preventDefault();
+    event.stopPropagation();
+    var defaultContainer = $('#ldp-uri').val();
     var thetweet = $('#tweet_url').val();
     var today = new Date();
     var today_iso = today.toISOString().slice(0,10);
@@ -124,6 +151,22 @@ $(function(){
     console.log(data);
     $('#claimreview_text').val(data);
     $('#claimreview_text').addClass('show').removeClass('hide');
+    
+    solid.web.post(defaultContainer, data).then(function(meta) {
+        // view
+        var url = meta.url;
+        if (url && url.slice(0,4) != 'http') {
+            if (url.indexOf('/') === 0) {
+                url = url.slice(1, url.length);
+            }
+            url = defaultContainer + url.slice(url.lastIndexOf('/') + 1, url.length);
+        }
+        // window.location.search = "?view="+encodeURIComponent(url);
+        console.log("Success! Sent payload to designated LDP-URI!");
+    }).catch(function(err) {
+        // do something with the error
+        console.log(err);
+    });
   });
 
 });
