@@ -50,6 +50,10 @@ body {
   margin-left: 132px
 }
 
+#pop_claim {
+    color:#FFFFFF;
+}
+
 .nav-pills.nav-wizard > li
 {
     position: relative;

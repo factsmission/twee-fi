@@ -1,4 +1,3 @@
-
 var solid = require('solid');
 
 $(function(){
@@ -9,6 +8,17 @@ $(function(){
     body: ''
   };
 
+  function default_timestamp() {
+    var momentNow = moment();
+    return "FactsMission--" + momentNow.format('YYYY-MM-DD') + '-' 
+    + momentNow.format('dddd').substring(0,3).toUpperCase() + "-" + momentNow.format('Ahhmmss');
+  }
+
+  var interval = setInterval(function() {
+    var stamp = default_timestamp();
+    // console.log(stamp);
+    $('#default_timestamp').html(stamp);
+  }, 1000);
 
   $('[data-toggle="tooltip"]').tooltip();
   $('#tweet_url').on('change keyup paste', function(){
@@ -24,7 +34,7 @@ $(function(){
   });
 
   $('#check_tweet').on('click',function(){
-    // Regex-pattern to check URLs against. 
+    // Regex-pattern to check URLs against: 
     // https://twitter.com/<twitteruser>/status/<long number>
     var urlRegex = /^https:\/\/twitter.com\/[a-zA-Z]+\/status\/[0-9]*$/;
     var tweet_url = $('#tweet_url').val();
@@ -80,7 +90,6 @@ $(function(){
     }
   };
 
-  
   $('#pop_claim').on('click',function(event){
     event.preventDefault();
     event.stopPropagation();
@@ -91,12 +100,14 @@ $(function(){
     $('#create-claim-review').trigger('click');
   });
 
-
-
   $('#submit_claim').on('click',function(event){
-    // do validations
+    // setup for this submit.
     event.preventDefault();
     event.stopPropagation();
+    $('#claimreview_text').val("");
+    $('#claimreview_text').addClass('hide').removeClass('show');
+    $("#cr-valid").removeClass("show").addClass("hide");
+    $("#cr-invalid").removeClass("show").addClass("hide");
     var defaultContainer = $('#ldp-uri').val();
     var thetweet = $('#tweet_url').val();
     var today = new Date();
@@ -123,10 +134,8 @@ $(function(){
       default:
         rating_alt = "May or may not be true";
     }
-    console.log(rating_alt);
-
     
-    // if all is good: 1.create claimreview and 2.save.
+    // if all is good: create claimreview and save.
     function schema(suffix) {
       return $rdf.sym("http://schema.org/"+suffix);
     }
@@ -148,24 +157,30 @@ $(function(){
     graph.add(claimReview, schema("reviewRating"), reviewRating);
     graph.add(claimReview, schema("url"), $rdf.sym(thetweet));
     var data = new $rdf.Serializer(graph, $rdf.sym("https://twitter.com/")).setBase("http://review.local/").toN3(graph);
-    console.log(data);
     $('#claimreview_text').val(data);
     $('#claimreview_text').addClass('show').removeClass('hide');
-    
-    solid.web.post(defaultContainer, data).then(function(meta) {
-        // view
-        var url = meta.url;
-        if (url && url.slice(0,4) != 'http') {
-            if (url.indexOf('/') === 0) {
-                url = url.slice(1, url.length);
-            }
-            url = defaultContainer + url.slice(url.lastIndexOf('/') + 1, url.length);
-        }
-        // window.location.search = "?view="+encodeURIComponent(url);
-        console.log("Success! Sent payload to designated LDP-URI!");
+    if ($('#claimreview_filename').val().length > 0 ) {
+      var slug = $('#claimreview_filename').val();
+    } else {
+      var slug = default_timestamp();
+    }
+    solid.web.post(defaultContainer, data, slug).then(function(meta) {
+      var url = meta.url;
+      if (url && url.slice(0,4) != 'http') {
+          if (url.indexOf('/') === 0) {
+              url = url.slice(1, url.length);
+          }
+          url = defaultContainer + url.slice(url.lastIndexOf('/') + 1, url.length);
+      }
+      console.log("Success! Sent payload to designated LDP-URI!");
+      $("#cr-valid").removeClass("hide").addClass("show");
+      $("#cr-invalid").removeClass("show").addClass("hide");
     }).catch(function(err) {
         // do something with the error
         console.log(err);
+        $('#cr_error_msg').text(err);
+        $("#cr-invalid").addClass("show").removeClass("hide");
+        $("#cr-valid").removeClass("show").addClass("hide");
     });
   });
 
