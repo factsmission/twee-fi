@@ -143,7 +143,24 @@
         </div>
         <!-- edit ClaimReview -->
         <div class="tab-pane fade" id="edit-claim-review-tab" role="tabpanel" aria-labelledby="edit-claim-review-tab">
-          <p class="muted">This is where you see your ClaimReviews, and can select and edit them.</p>
+          <div class="tab-header mt-4 mb-4">
+            <h4>This is where you see your ClaimReviews, and can view and delete them:</h4>
+            <button id="list-ldp" class="btn btn-primary mt-2">List LDP</button><i id="spinner" class="fa fa-cog fa-spin fa-2x ml-4 fa-fw text-primary fade hide"></i>
+            <span class="sr-only">Loading...</span>
+          </div>
+          <table id="container_content" class="table table-hover table-bordered table-striped table-sm">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="content_listing">
+            </tbody>
+
+          </table>
+          
+
         </div>
       </div>
     </div>

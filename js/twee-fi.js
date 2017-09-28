@@ -14,12 +14,12 @@ $(function(){
     + momentNow.format('dddd').substring(0,3).toUpperCase() + "-" + momentNow.format('Ahhmmss');
   }
 
-  var interval = setInterval(function() {
-    var stamp = default_timestamp();
-    // console.log(stamp);
-    $('#default_timestamp').html(stamp);
-  }, 1000);
-
+  // var interval = setInterval(function() {
+  //   var stamp = default_timestamp();
+  //   // console.log(stamp);
+  //   $('#default_timestamp').html(stamp);
+  // }, 1000);
+  $('#default_timestamp').html(default_timestamp());
   $('[data-toggle="tooltip"]').tooltip();
   $('#tweet_url').on('change keyup paste', function(){
     $("#tweet-valid").removeClass("show").addClass("hide");
@@ -85,6 +85,7 @@ $(function(){
     }
     if ($('#valcheck_1_ck').prop('checked') && $('#valcheck_2_ck').prop('checked') && $('#valcheck_3_ck').prop('checked') && $('#valcheck_4_ck').prop('checked')) {
       $('#submit_claim').prop("disabled",false);
+      $('#default_timestamp').html(stamp);
     } else {
       $('#submit_claim').prop("disabled",true)
     }
@@ -184,4 +185,21 @@ $(function(){
     });
   });
 
-});
+  // list contents of the LDP
+  $('#list-ldp').on('click',function(event){
+    $('#spinner').addClass('show').removeClass('hide');
+    $('#content_listing').empty();
+    var defaultContainer = $('#ldp-uri').val();
+    var start_row = "<tr><td>";
+    var end_row = "</td><td><button class='btn-listing-show btn btn-sm btn-info mr-2'>show</button><button class='btn-listing-show btn btn-sm btn-danger mr-2'>delete</button>"
+    var container = solid.web.get(defaultContainer)
+    .then(function (container) {
+      for (i = 0; i < container.contentsUris.length; i++) { 
+        var new_row = start_row + container.contentsUris[i] + end_row ;
+        $('#content_listing').append(new_row);
+      }
+      $('#spinner').addClass('hide').removeClass('show');
+      });
+    });
+  });
+

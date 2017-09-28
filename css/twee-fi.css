@@ -54,6 +54,20 @@ body {
     color:#FFFFFF;
 }
 
+#container_content tr td:first-child {
+    width:80%;
+    padding-top: 15px;
+    padding-bottom: 5px;
+}
+
+#container_content tr td:last-child {
+    width:20%;
+}
+
+#content_listing {
+    overflow-y: scroll;
+}
+
 .nav-pills.nav-wizard > li
 {
     position: relative;
