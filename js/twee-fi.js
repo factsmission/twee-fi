@@ -189,9 +189,13 @@ $(function(){
     
   // list contents of the LDP
   $('#list-ldp').on('click',function(event){
+    var defaultContainer = $('#ldp-uri').val();
+    if (defaultContainer.length == 0) {
+      alert("You need to set the value of LDP-URI on the Select LDP-URI tab first.");
+      return;
+    }
     $('#spinner').addClass('show').removeClass('hide');
     $('#content_listing').empty();
-    var defaultContainer = $('#ldp-uri').val();
     var start_row = "<tr><td>";
     var end_row = "</td><td><button class='btn-listing-show btn btn-sm btn-info mr-2'>show</button><button class='btn-listing-delete btn btn-sm btn-danger mr-2'>delete</button>"
     var container = solid.web.get(defaultContainer)
