@@ -227,6 +227,20 @@ $(function(){
             console.log(err) // error object
         })
       });
+      $('.btn-listing-delete').on('click',function(event){
+        var targ = $(this).parent().parent().children('td:eq(0)');
+        var targ_text = targ.text();
+        console.log(targ_text);
+        if (window.confirm("Delete ClaimReview?")){
+        solid.web.del(targ_text)
+          .then(function (response) {
+            console.log(response);
+            targ.parent().remove();
+          }).catch(function (err) {
+            console.log(err); // error object
+          });
+        };
+      });
     });
   });
 
