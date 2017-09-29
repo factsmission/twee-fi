@@ -85,7 +85,7 @@ $(function(){
     }
     if ($('#valcheck_1_ck').prop('checked') && $('#valcheck_2_ck').prop('checked') && $('#valcheck_3_ck').prop('checked') && $('#valcheck_4_ck').prop('checked')) {
       $('#submit_claim').prop("disabled",false);
-      $('#default_timestamp').html(stamp);
+      $('#default_timestamp').html(default_timestamp());
     } else {
       $('#submit_claim').prop("disabled",true)
     }
