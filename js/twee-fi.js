@@ -36,7 +36,7 @@ $(function(){
   $('#check_tweet').on('click',function(){
     // Regex-pattern to check URLs against: 
     // https://twitter.com/<twitteruser>/status/<long number>
-    var urlRegex = /^https:\/\/twitter.com\/[a-zA-Z]+\/status\/[0-9]*$/;
+    var urlRegex = /^https:\/\/twitter.com\/[a-zA-Z _.,!"'/$]+\/status\/[0-9]*$/;
     var tweet_url = $('#tweet_url').val();
     if (urlRegex.test(tweet_url)) {
       $("#tweet-valid").removeClass("hide").addClass("show");
