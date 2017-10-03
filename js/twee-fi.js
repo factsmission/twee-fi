@@ -14,11 +14,6 @@ $(function(){
     + momentNow.format('dddd').substring(0,3).toUpperCase() + "-" + momentNow.format('Ahhmmss');
   }
 
-  // var interval = setInterval(function() {
-  //   var stamp = default_timestamp();
-  //   // console.log(stamp);
-  //   $('#default_timestamp').html(stamp);
-  // }, 1000);
   $('#default_timestamp').html(default_timestamp());
   $('[data-toggle="tooltip"]').tooltip();
   $('#tweet_url').on('change keyup paste', function(){
@@ -33,12 +28,24 @@ $(function(){
     CheckData();
   });
 
+
+  function check_tweet(value){
+    // Regex-pattern to check URLs against: 
+    // https://twitter.com/<twitteruser>/status/<long number>
+    var urlRegex = /^https:\/\/twitter.com\/[a-zA-Z _.,!"'/$]+\/status\/[0-9]*$/;
+    if (urlRegex.test(value)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
   $('#check_tweet').on('click',function(){
     // Regex-pattern to check URLs against: 
     // https://twitter.com/<twitteruser>/status/<long number>
     var urlRegex = /^https:\/\/twitter.com\/[a-zA-Z _.,!"'/$]+\/status\/[0-9]*$/;
     var tweet_url = $('#tweet_url').val();
-    if (urlRegex.test(tweet_url)) {
+    if (check_tweet(tweet_url)) {
       $("#tweet-valid").removeClass("hide").addClass("show");
     } else {
       $("#tweet-invalid").removeClass("hide").addClass("show");
@@ -47,7 +54,7 @@ $(function(){
 
   function CheckData() {
     const LDP_neg_msg = "Missing LDP-URI.";
-    const Tweet_url_neg_msg = "Missing Tweet URL.";
+    const Tweet_url_neg_msg = "Missing Valid Tweet URL.";
     const Claim_neg_msg = "Missing Claim made in Tweet.";
     const Rating_neg_msg = "Missing Rating.";
     const LDP_msg = "LDP-URI appears valid";
@@ -62,7 +69,7 @@ $(function(){
       $('#valcheck_1_msg').text(LDP_msg);
       $('#valcheck_1_ck').prop('checked', true);
     }
-    if ($('#tweet_url').val() == false) {
+    if (check_tweet($('#tweet_url').val()) == false) {
       $('#valcheck_2_msg').text(Tweet_url_neg_msg);
       $('#valcheck_2_ck').prop('checked', false);
     } else {
