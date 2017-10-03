@@ -21,7 +21,7 @@ $(function(){
     $("#tweet-invalid").removeClass("show").addClass("hide");
     CheckData();
   });
-  $('#claim_reviewed, #ldp-uri').on('change keyup paste', function(){
+  $('#claim_reviewed, #ldp-uri, #review_body').on('change keyup paste', function(){
     CheckData();
   });
   $('#rating-in-stars').on('change', function(){
@@ -56,12 +56,13 @@ $(function(){
     const LDP_neg_msg = "Missing LDP-URI.";
     const Tweet_url_neg_msg = "Missing Valid Tweet URL.";
     const Claim_neg_msg = "Missing Claim made in Tweet.";
+    const Review_body_neg_msg = "Missing the body of your Review.";
     const Rating_neg_msg = "Missing Rating.";
     const LDP_msg = "LDP-URI appears valid";
     const Tweet_url_msg = "Tweet URL appears valid";
     const Claim_msg = "Claim in Tweet described.";
     const Rating_msg = "Claim Rated.";
-    
+    const Review_body_msg = "Review of Tweet described.";
     if ($('#ldp-uri').val() == false) {
       $('#valcheck_1_msg').text(LDP_neg_msg);
       $('#valcheck_1_ck').prop('checked', false);
@@ -77,20 +78,27 @@ $(function(){
       $('#valcheck_2_ck').prop('checked', true);
     }
     if ($('#claim_reviewed').val() == false) {
-      $('#valcheck_3_msg').text(Claim_neg_msg);
+      $('#valcheck_3_msg').text(Review_body_neg_msg);
       $('#valcheck_3_ck').prop('checked', false);
     } else {
-      $('#valcheck_3_msg').text(Claim_msg);
+      $('#valcheck_3_msg').text(Review_body_msg);
       $('#valcheck_3_ck').prop('checked', true);
     }
-    if ($('#rating-in-stars').val() == 0) {
-      $('#valcheck_4_msg').text(Rating_neg_msg);
+    if ($('#review_body').val() == false) {
+      $('#valcheck_4_msg').text(Claim_neg_msg);
       $('#valcheck_4_ck').prop('checked', false);
     } else {
-      $('#valcheck_4_msg').text(Rating_msg);
+      $('#valcheck_4_msg').text(Claim_msg);
       $('#valcheck_4_ck').prop('checked', true);
     }
-    if ($('#valcheck_1_ck').prop('checked') && $('#valcheck_2_ck').prop('checked') && $('#valcheck_3_ck').prop('checked') && $('#valcheck_4_ck').prop('checked')) {
+    if ($('#rating-in-stars').val() == 0) {
+      $('#valcheck_5_msg').text(Rating_neg_msg);
+      $('#valcheck_5_ck').prop('checked', false);
+    } else {
+      $('#valcheck_5_msg').text(Rating_msg);
+      $('#valcheck_5_ck').prop('checked', true);
+    }
+    if ($('#valcheck_1_ck').prop('checked') && $('#valcheck_2_ck').prop('checked') && $('#valcheck_3_ck').prop('checked') && $('#valcheck_4_ck').prop('checked') && $('#valcheck_5_ck').prop('checked')) {
       $('#submit_claim').prop("disabled",false);
       $('#default_timestamp').html(default_timestamp());
     } else {
@@ -104,6 +112,7 @@ $(function(){
     $('#ldp-uri').val("https://farewellutopia.com:8443/");
     $('#tweet_url').val("https://twitter.com/wesbos/status/912736261630251008");
     $('#claim_reviewed').val("That Facebook has decided to relicense React & Friends to MIT.");
+    $('#review_body').val("Wes Bos is a reliable developer and has no reason to lie.");
     
     $('#create-claim-review').trigger('click');
   });
@@ -123,6 +132,7 @@ $(function(){
     var rating_int = $('#rating-in-stars').val();
     var rating_alt = "";
     var claim_reviewed = $('#claim_reviewed').val();
+    var review_body = $('#review_body').val();
     switch (rating_int) {
       case '1':
         rating_alt = "Flat out lie";
@@ -155,6 +165,9 @@ $(function(){
     var claimReview = $rdf.sym("http://review.local/");
     graph.add(claimReview, rdf("type"), schema("ClaimReview"));
     graph.add(claimReview, schema("claimedReviewed"), claim_reviewed);
+    var reviewBody = $rdf.blankNode();
+    graph.add(reviewBody, rdf("type"), schema("reviewBody"));
+    graph.add(reviewBody, schema("reviewBody"), review_body);
     var itemReviewed = $rdf.sym(thetweet);
     graph.add(claimReview, schema("itemReviewed"), itemReviewed);
     graph.add(claimReview, schema("datePublished"), $rdf.literal(today_iso, schema("Date")));

@@ -33,8 +33,7 @@
     </nav>
     <div class="container">
       <div class="starter-bar">
-        <h1 class="display-4">Twee-Fi Milestone 1</h1>
-        <p class="lead">1 sentence description of Twee-fi (more in about)<br>1 sentence description of this Milestone</p>
+        <h1 class="display-4">Twee-Fi</h1>
         <ul class="nav nav-pills nav-wizard" id="pills-tab" role="tablist">
           <li class="nav-item first-item">
             <a class="nav-link active" id="setup-tab" data-toggle="pill" href="#setup-ldp-tab" role="tab" aria-controls="setup-ldp" aria-expanded="true">Select LDP-URI </a>
@@ -86,12 +85,17 @@
             </div>
             <form>
               <div class="form-group">
-                <label for="check-tweet">Summarize what the Tweet Claimed</label>
+                <label for="claim_reviewed">Summarize what the Tweet Claimed</label>
                 <textarea id="claim_reviewed" rows="3" class="form-control" aria-describedby="Claim you are reviewing" placeholder="Claim made in Tweet"></textarea>
                 <small id="claim_reviewedHelp" class="form-text text-muted">What does the tweet claim?</small>
               </div>
               <div class="form-group">
-                <label for="check-tweet">Rate the truthfulness of the Claim:</label>
+                <label for="review_body">What's your review of this Tweet?</label>
+                <textarea id="review_body" rows="3" class="form-control" aria-describedby="The body of your review" placeholder="The body of your review"></textarea>
+                <small id="review_bodyHelp" class="form-text text-muted">What is your review of this Tweet?</small>
+              </div>
+              <div class="form-group">
+                <label for="rating-in-stars">Rate the truthfulness of the Claim:</label>
                 <input type="number"  id="rating-in-stars" class="rating" data-clearable="reset rating" data-icon-lib="fa" data-active-icon="fa-star" data-inactive-icon="fa-star-o" data-clearable-icon="fa-trash-o" value="0" data-inline/>
               </div>
               <div class="form-group">
@@ -132,7 +136,12 @@
                 <label  id="valcheck_4" class="custom-control custom-checkbox">
                   <input id="valcheck_4_ck" type="checkbox" class="custom-control-input">
                   <span class="custom-control-indicator"></span>
-                  <span id="valcheck_4_msg" class="custom-control-description">Claim rated.</span>
+                  <span id="valcheck_4_msg" class="custom-control-description">Claim reviewed.</span>
+                </label>
+                <label  id="valcheck_5" class="custom-control custom-checkbox">
+                  <input id="valcheck_5_ck" type="checkbox" class="custom-control-input">
+                  <span class="custom-control-indicator"></span>
+                  <span id="valcheck_5_msg" class="custom-control-description">Claim rated.</span>
                 </label>
               </div>
               <div class="col-7">
@@ -157,10 +166,7 @@
             </thead>
             <tbody id="content_listing">
             </tbody>
-
           </table>
-          
-
         </div>
       </div>
     </div>
