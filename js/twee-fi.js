@@ -165,9 +165,7 @@ $(function(){
     var claimReview = $rdf.sym("http://review.local/");
     graph.add(claimReview, rdf("type"), schema("ClaimReview"));
     graph.add(claimReview, schema("claimedReviewed"), claim_reviewed);
-    var reviewBody = $rdf.blankNode();
-    graph.add(reviewBody, rdf("type"), schema("reviewBody"));
-    graph.add(reviewBody, schema("reviewBody"), review_body);
+    graph.add(claimReview, schema("reviewBody"), review_body);
     var itemReviewed = $rdf.sym(thetweet);
     graph.add(claimReview, schema("itemReviewed"), itemReviewed);
     graph.add(claimReview, schema("datePublished"), $rdf.literal(today_iso, schema("Date")));
