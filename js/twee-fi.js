@@ -178,7 +178,7 @@ $(function(){
     var data = new $rdf.Serializer(graph, $rdf.sym("https://twitter.com/")).setBase("http://review.local/").toN3(graph);
     $('#claimreview_text').val(data);
     $('#claimreview_text').addClass('show').removeClass('hide');
-    if ($('#claimreview_filename').val().length > 0 ) {
+    if (($('#claimreview_filename').length > 0) && ($('#claimreview_filename').val().length > 0 )) {
       var slug = $('#claimreview_filename').val();
     } else {
       var slug = default_timestamp();
