@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>Solid Auth example</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="js/solid-auth-client.bundle.js"></script>
+        <script src="https://solid.github.io/releases/rdflib.js/rdflib-0.16.2.min.js"></script>
+        <script>
+            var webId = null;
+            var vocab = {
+                schema : function(suffix) {
+                    return $rdf.sym("http://schema.org/"+suffix);
+                },
+                rdf : function(suffix) {
+                    return $rdf.sym("http://www.w3.org/1999/02/22-rdf-syntax-ns#"+suffix);
+                },
+                solid : function(suffix) {
+                    return $rdf.sym("http://www.w3.org/ns/solid/terms#"+suffix);
+                },
+                space : function(suffix) {
+                    return $rdf.sym("http://www.w3.org/ns/pim/space#"+suffix);
+                }, 
+                foaf : function(suffix) {
+                    return $rdf.sym("http://xmlns.com/foaf/0.1/"+suffix);
+                }
+            };
+            var absolutePath = function(href) {
+                var link = document.createElement("a");
+                link.href = href;
+                return (link.protocol+"//"+link.host+link.pathname+link.search+link.hash);
+            }
+            var login = function() {
+                localStorage.removeItem("solid-auth-client")
+                var authPromise = SolidAuthClient.login("https://solid.factsmission.com:8443/");
+                authPromise.then(function(auth) {
+                    if (typeof auth === "function") {
+                        auth();
+                    } else {
+                        webId = auth.webId;
+                        alert("Succesfully logged in "+webId);
+                        var user = $rdf.sym(webId);
+                        var graph = $rdf.graph();
+                        var fetcher = new $rdf.Fetcher(graph, { fetch: SolidAuthClient.fetch } );
+                        fetcher.fetch(webId)
+                              .then(function (response) {
+                                var name = graph.any(user, vocab.foaf('name'))
+                                alert("Hello "+name);
+                        });
+                    }
+                })
+            }
+            
+            var loadStorage = function() {
+                if (!webId) {
+                    alert("No WebID available, login first");
+                    return;
+                }
+                var user = $rdf.sym(webId);
+                var graph = $rdf.graph();
+                var fetcher = new $rdf.Fetcher(graph, { fetch: SolidAuthClient.fetch } );
+                fetcher.fetch(webId)
+                      .then(function (response) {
+                        var storage = graph.any(user, vocab.space('storage'));
+                        console.log("Loading "+storage+" will dump to console");
+                        var storageRootGraph = $rdf.graph();
+                        var fetcher = new $rdf.Fetcher(storageRootGraph, { fetch: SolidAuthClient.fetch } );
+                        fetcher.fetch(storage)
+                            .then(function (response) {
+                                alert("Got "+storageRootGraph.length+" triples");
+                                console.log(response);
+                                console.log(storageRootGraph.toString());
+                        })
+                      });
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Solid-Auth Demo</h1>
+        <button onclick="login()">Login</button>
+        <button onclick="loadStorage()">Get Storage</button>
+    </body>
+</html>

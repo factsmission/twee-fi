@@ -1,12 +1,79 @@
+/*global $rdf, SolidAuthClient*/
+
 var solid = require('solid');
 
+var webId = null;
+var vocab = {
+    schema : function(suffix) {
+        return $rdf.sym("http://schema.org/"+suffix);
+    },
+    rdf : function(suffix) {
+        return $rdf.sym("http://www.w3.org/1999/02/22-rdf-syntax-ns#"+suffix);
+    },
+    solid : function(suffix) {
+        return $rdf.sym("http://www.w3.org/ns/solid/terms#"+suffix);
+    },
+    space : function(suffix) {
+        return $rdf.sym("http://www.w3.org/ns/pim/space#"+suffix);
+    }, 
+    foaf : function(suffix) {
+        return $rdf.sym("http://xmlns.com/foaf/0.1/"+suffix);
+    }
+};
+var absolutePath = function(href) {
+    var link = document.createElement("a");
+    link.href = href;
+    return (link.protocol+"//"+link.host+link.pathname+link.search+link.hash);
+};
+var updateLoggingStatus = function() {
+    if(!webId) {
+       $("#loginInfo").html("Not logged in"); 
+    } else {
+        var user = $rdf.sym(webId);
+        var graph = $rdf.graph();
+        var fetcher = new $rdf.Fetcher(graph, { fetch: SolidAuthClient.fetch } );
+        fetcher.fetch(webId).then(function (response) {
+            var name = graph.any(user, vocab.foaf('name'));
+            $("#loginInfo").html("Logged in as: <a class='nav-link' href='"+webId+"'>"+name+"</a>");
+        });
+    }
+}
+var loadStorage = function() {
+    if (!webId) {
+        alert("No WebID available, login first");
+        return;
+    }
+    var user = $rdf.sym(webId);
+    var graph = $rdf.graph();
+    var fetcher = new $rdf.Fetcher(graph, { fetch: SolidAuthClient.fetch } );
+    fetcher.fetch(webId)
+          .then(function (response) {
+            var storage = graph.any(user, vocab.space('storage'));
+            console.log("Loading "+storage+" will dump to console");
+            var storageRootGraph = $rdf.graph();
+            var fetcher = new $rdf.Fetcher(storageRootGraph, { fetch: SolidAuthClient.fetch } );
+            fetcher.fetch(storage)
+                .then(function (response) {
+                    alert("Got "+storageRootGraph.length+" triples");
+                    console.log(response);
+                    console.log(storageRootGraph.toString());
+            })
+          });
+}
+            
 $(function(){
-   // Bin structure
-  var bin = {
-    url: '',
-    title: '',
-    body: ''
-  };
+
+  $(".login").on('click',function() {
+        localStorage.removeItem("solid-auth-client");
+        var authPromise = SolidAuthClient.popupLogin({ popupUri: absolutePath('popup.html') });
+        authPromise.then(function(auth) {
+            webId = auth.webId;
+            updateLoggingStatus();
+        }).catch(function() {
+            webId = null;
+            alert("failed");
+        });
+    });
 
   function default_timestamp() {
     var momentNow = moment();
@@ -174,7 +241,7 @@ $(function(){
     graph.add(reviewRating, schema("ratingValue"), rating_int);
     graph.add(reviewRating, schema("alternateName"), rating_alt);
     graph.add(claimReview, schema("reviewRating"), reviewRating);
-    graph.add(claimReview, schema("url"), $rdf.sym(thetweet));
+    graph.add(claimReview, schema("url"), claimReview);
     var data = new $rdf.Serializer(graph, $rdf.sym("https://twitter.com/")).setBase("http://review.local/").toN3(graph);
     $('#claimreview_text').val(data);
     $('#claimreview_text').addClass('show').removeClass('hide');
@@ -184,13 +251,6 @@ $(function(){
       var slug = default_timestamp();
     }
     solid.web.post(defaultContainer, data, slug).then(function(meta) {
-      var url = meta.url;
-      if (url && url.slice(0,4) != 'http') {
-          if (url.indexOf('/') === 0) {
-              url = url.slice(1, url.length);
-          }
-          url = defaultContainer + url.slice(url.lastIndexOf('/') + 1, url.length);
-      }
       console.log("Success! Sent payload to designated LDP-URI!");
       $("#cr-valid").removeClass("hide").addClass("show");
       $("#cr-invalid").removeClass("show").addClass("hide");

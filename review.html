@@ -52,35 +52,7 @@
           </li>
         </ul>
       </div>
-      <div class="tab-content" id="nav-tabContent">
-        <!-- ldp setup -->
-        <div class="tab-pane fade show active" id="setup-ldp-tab" role="tabpanel" aria-labelledby="nav-home-tab">
-          <div class="tab-header mt-4 mb-4">
-            <h4>Enter your LDP-URI</h4>
-          </div>
-          <div class="form-group">
-            <button class="login btn btn-primary">Login</button>
-            <label for="ldp-uri">LDP-URI</label>
-            <input type="text" class="form-control" id="ldp-uri" aria-describedby="ldp uri" placeholder="https://farewellutopia.com:8443/">
-            <small id="ldp-uri-help" class="form-text text-muted">It should look similar to: https://farewellutopia.com:8443/</small>
-          </div>
-        </div>
-        <!-- select tweet -->
-        <div class="tab-pane fade" id="select-tweet-tab" role="tabpanel" aria-labelledby="select-tweet-tab">
-          <div class="tab-header mt-4 mb-4">
-            <h4>Enter the Tweet you want to <a href="https://schema.org/ClaimReview" target="_blank">ClaimReview</a>. Then click "Check this Tweet" to check your URL.</h4>
-          </div>
-          <div class="form-group">
-            <label for="tweet_url">Tweet URL:</label>
-            <input type="text" class="form-control" id="tweet_url" aria-describedby="check tweet" placeholder="https://twitter.com/<twitteruser>/status/<long number>">
-            <small  class="form-text text-muted">All tweet urls have the word "status" in them.</small>
-          </div>
-          <button id="check_tweet" class="btn btn-primary">Check this Tweet</button>
-          <p class="mt-3" >
-            <span id="tweet-valid" class="text-success mt-4 mr-4 fade hide">Your Tweet URL appears valid!</span>
-            <span id="tweet-invalid" class="text-danger mt-4 mr-4 fade hide">Your Tweet URL does not appear valid!</span>
-          </p>
-        </div>
+      <div class="tab-pane fade show active" id="nav-tabContent">        
         <!-- create ClaimReview -->
         <div class="tab-pane fade" id="create-claim-review-tab" role="tabpanel" aria-labelledby="create-claim-review-tab">
           <div class="create-claim-container">
@@ -154,24 +126,7 @@
             </div>
           </div>            
         </div>
-        <!-- edit ClaimReview -->
-        <div class="tab-pane fade" id="edit-claim-review-tab" role="tabpanel" aria-labelledby="edit-claim-review-tab">
-          <div class="tab-header mt-4 mb-4">
-            <h4>This is where you see your ClaimReviews, and can view and delete them:</h4>
-            <button id="list-ldp" class="btn btn-primary mt-2">List LDP</button><i id="spinner" class="fa fa-cog fa-spin fa-2x ml-4 fa-fw text-primary fade hide"></i>
-            <span class="sr-only">Loading...</span>
-          </div>
-          <table id="container_content" class="table table-hover table-bordered table-striped table-sm">
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody id="content_listing">
-            </tbody>
-          </table>
-        </div>
+
       </div>
     </div>
     <nav class="navbar fixed-bottom navbar-light bg-light">
@@ -179,28 +134,7 @@
         Copyright &copy; 2017 <a class="navbar-brand" href="#"><copyright holder><a href="dkdk" target="_blank">FactsMission</a> AG Biel/Bienne, Switzerland</copyright>. <strong> Twee-Fi</strong>, an Open Source Project. License: <a href="https://opensource.org/licenses/MIT"target="blank">MIT</a> Repo: <a href="https://github.com/factsmission/twee-fi" target="_blank"><img src="images/github-32px.png" alt="Twee-Fi on GitHub"></a>
       </span>
     </nav>
-    <!-- Modal Show ClaimReview Start -->
-    <div class="modal fade" id="show_claim_review" tabindex="-1" role="dialog" aria-labelledby="show_claim_reviewLabel" aria-hidden="true">
-      <div class="modal-dialog modal-lg" role="document">
-        <div class="modal-content">
-          <div class="modal-header">
-            <h5 class="modal-title" id="show_claim_reviewLabel">Claim Review:</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-              <span aria-hidden="true">&times;</span>
-            </button>
-          </div>
-          <div class="modal-body">
-            <h5 id="claim_review_listing_heading"></h5>
-            <div class="form-group">
-              <textarea id="claim_review_listing" class="form-control" rows="20" ></textarea>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
-          </div>
-        </div>
-      </div>
-    </div>
+
     <!-- Modal Show ClaimReview End -->
     <!-- /.container -->
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
@@ -213,6 +147,6 @@
     <!-- UX components -->
     <script src="js/bootstrap-rating-input.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
-    <script src="js/twee-fi.js"></script>
+    <!-- <script src="js/twee-fi.js"></script> -->
   </body>
 </html>
