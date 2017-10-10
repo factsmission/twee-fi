@@ -35,14 +35,15 @@
         <div class="container-fluid">
             <h1 class="display-3">Review Tweet</h1>
             <div id="tweetview">
-                <!-- Here is where JS should display the Tweet -->
+                <iframe height=250 width=550 src="http://twitframe.com/show?url=https%3A%2F%2Ftwitter.com%2Fjack%2Fstatus%2F20"></iframe>
             </div>
-          <iframe border=0 frameborder=0 height=250 width=550 
- src="http://twitframe.com/show?url=https%3A%2F%2Ftwitter.com%2Fjack%2Fstatus%2F20"></iframe>
-            <hr />
-            <iframe border=0 frameborder=0 height=250 width=550 
- src="https://twitter.com/Interior/status/463440424141459456"></iframe>
+
             <form>
+                <div class="form-group">
+                    <label for="tweet_url">Tweet URL:</label>
+                    <input type="text" class="form-control" id="tweet_url" placeholder="https://twitter.com/<twitteruser>/status/<long number>">
+                    <small  class="form-text text-muted">All tweet urls have the word "status" in them.</small>
+                </div>
                 <div class="form-group">
                     <label for="claim_reviewed">Summarize what the Tweet Claimed</label>
                     <textarea id="claim_reviewed" rows="3" class="form-control" aria-describedby="Claim you are reviewing" placeholder="Claim made in Tweet"></textarea>
@@ -73,6 +74,7 @@
                     </div>
                 </div>
             </form>
+
             <h6 class="mt-4 text-uppercase">ClaimReview Status:</h6>
             <div class="row">
                 <div class="col-5 mt-1 custom-controls-stacked">
@@ -106,7 +108,9 @@
                     <textarea id="claimreview_text" class="col-12 fade hide form-control" rows="6" aria-describedby="ClaimReview" placeholder="ClaimReview contents."></textarea>
                 </div>
             </div>
+
         </div>
+
         <nav class="navbar navbar-light bg-light invisible">
             <span class="navbar-text">
                 Copyright &copy; 2017 <copyright holder><a href="#" target="_blank">FactsMission</a> AG Biel/Bienne, Switzerland</copyright>. <strong> Twee-Fi</strong>, an Open Source Project. License: <a href="#" target="blank">MIT</a> Repo: <a href="#" target="_blank"><img src="images/github-32px.png" alt="Twee-Fi on GitHub"></a>
@@ -137,16 +141,12 @@
             $(function () {
                 var searchParams = new URLSearchParams(window.location.search);
                 var tweetURL = searchParams.get("tweet");
-                embedURL = "https://publish.twitter.com/oembed?url=" + tweetURL;
-                fetch(embedURL)
-                        .then((resp) => resp.json())
-                        .then(function (data) {
-                            let stuff = data.results;
-                            var json = JSON.parse(data);
-                            var ehtml = json["html"];
-                            alert(json.html);
-                            alert("hui");
-                        });
+                var tweetInput = document.getElementById("tweet_url");
+                tweetInput.value = tweetURL;
+                //why isn't this working?
+                if (tweetInput.hasAttribute("value")) {
+                    tweetInput.disabled = true;
+                }
             });
         </script>
     </body> 
