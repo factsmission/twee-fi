@@ -1,14 +1,6 @@
 /* global SolidAuthClient, $rdf*/
 
-//var SolidWebClient = require("solid").web; 
-var SolidWebClient = new SolidWebClient()
 
-SolidWebClient.solidRequest = function (url, method, options, data) {
-    return SolidAuthClient.fetch(url, Object.assign(options, {
-        'method': method,
-        'body': data
-    }));
-};
 function rdfFetch(uri, authIfNeeded = true) {
     return new Promise(function (resolve, reject) {
         var graph = $rdf.graph();
@@ -93,8 +85,16 @@ function getStorageRootContainer() {
 
 function createLdpc(base, name) {
     var severBase = getBaseURI(base);
-    var body = '@prefix dct: <http://purl.org/dc/terms/> . \n@prefix ldp: <http://www.w3.org/ns/ldp#>. \n\n<> a ldp:BasicContainer ; \n\x09 dct:title "Container title" .';
-    return SolidWebClient.createContainer(base, name, undefined, body).then(function (response) {
+    var body = '@prefix dct: <http://purl.org/dc/terms/> . \n@prefix ldp: <http://www.w3.org/ns/ldp#>. \n\n<> a ldp:BasicContainer ; \n\x09 dct:title "Containainer created by Twee-Fi" .';
+    return SolidAuthClient.fetch(base, {
+        'method': 'POST',
+        'body': body,
+        'headers': {
+            'Content-Type': 'text/turtle',
+            'Link': '<http://www.w3.org/ns/ldp#BasicContainer>; rel="type"',
+            'Slug': name
+        }
+    }).then(function (response) {
         return severBase + response.headers.get("Location");
     });
 }
