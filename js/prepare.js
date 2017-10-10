@@ -49,6 +49,16 @@ function parseLinkHeader(link) {
     return rels;
 }
 
+/**
+ * 
+ * Fetches an RDF graph. If the server return 401 the login process will be 
+ * started upon which the fetch will be retried.
+ *
+ * @param uri {string} The URI to be fetched
+ * @param authIfNeeded {boolean} Set to false if it shall not attempt to log in
+ *
+ * @return {Promise<Response>} Response has a `graph`property with the rertived graph
+ */
 function rdfFetch(uri, authIfNeeded = true) {
     return new Promise(function (resolve, reject) {
         var graph = $rdf.graph();
@@ -70,7 +80,7 @@ function rdfFetch(uri, authIfNeeded = true) {
                 }
             }
         });
-    })
+    });
 }
 
 var vocab = {
@@ -90,6 +100,7 @@ var vocab = {
         return $rdf.sym("http://xmlns.com/foaf/0.1/" + suffix);
     }
 };
+
 function absolutePath(href) {
     var link = document.createElement("a");
     link.href = href;
@@ -103,12 +114,14 @@ function getBaseURI(uri) {
     return protocol + '//' + host;
 }
 
+/**
+ * Open a popup and allow the user to log in.
+ * 
+ * @return {Promise<session>}
+ */
 function login() {
     localStorage.clear();
-    return SolidAuthClient.popupLogin({popupUri: absolutePath('popup.html')}); /*.then(
-     function (auth) {
-     updateLoginInfo();
-     });*/
+    return SolidAuthClient.popupLogin({popupUri: absolutePath('popup.html')}); 
 }
 
 function updateLoginInfo() {
@@ -124,7 +137,6 @@ function updateLoginInfo() {
 function getStorageRootContainer() {
     return SolidAuthClient.currentSession().then(function (session) {
         var user = $rdf.sym(session.webId);
-        var graph = $rdf.graph();
         return rdfFetch(session.webId)
                 .then(function (response) {
                     var storage = response.graph.any(user, vocab.space('storage'));
@@ -134,11 +146,12 @@ function getStorageRootContainer() {
 }
 
 /**
+ * @param uri {string} The URI that should be an LDPC
  * 
  * @return a Promise that is fullfilled if uri is an LDPC and rejected otherwise
  */
 function assertLdpc(uri) {
-    if (uri.charAt(uri.length-1) != '/') {
+    if (uri.charAt(uri.length-1) !== '/') {
         uri = uri+'/';
     }
     return new Promise(function (resolve, reject) {
@@ -172,7 +185,7 @@ function createLdpc(base, name) {
 }
 
 function createLdpcIfNeeded(base, name) {
-    if (base.charAt(base.length-1) != '/') {
+    if (base.charAt(base.length-1) !== '/') {
         base = base+'/';
     }
     return assertLdpc(base+name).catch(function() {
