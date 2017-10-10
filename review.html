@@ -35,14 +35,13 @@
         <div class="container-fluid">
             <h1 class="display-3">Review Tweet</h1>
             <div id="tweetview">
-                <iframe height=250 width=550 src="http://twitframe.com/show?url=https%3A%2F%2Ftwitter.com%2Fjack%2Fstatus%2F20"></iframe>
+                <iframe id="twitframe" height=250 width=550 ></iframe>
             </div>
 
             <form>
                 <div class="form-group">
                     <label for="tweet_url">Tweet URL:</label>
                     <input type="text" class="form-control" id="tweet_url" placeholder="https://twitter.com/<twitteruser>/status/<long number>">
-                    <small  class="form-text text-muted">All tweet urls have the word "status" in them.</small>
                 </div>
                 <div class="form-group">
                     <label for="claim_reviewed">Summarize what the Tweet Claimed</label>
@@ -57,14 +56,10 @@
                     <label for="rating-in-stars">Rate the truthfulness of the Claim:</label>
                     <input required type="number"  id="rating-in-stars" class="rating" data-clearable="reset rating" data-icon-lib="fa" data-active-icon="fa-star" data-inactive-icon="fa-star-o" data-clearable-icon="fa-trash-o" value="0" data-inline/>
                 </div>
-                <div class="form-group">
-                    <label for="claimreview_filename">File name for your ClaimReview</label>
-                    <input type="text" class="form-control" disabled id="claimreview_filename" aria-describedby="claimreview_filename" placeholder="">
-                    <small id="claimreview_filename-help" class="form-text text-muted">If left blank, "<span id="default_timestamp"></span>" will be used.</small>
-                </div>
+                
                 <div class="row">
                     <div class="col-2">
-                        <button id="submit_claim" disabled class="btn btn-primary mt-2">Create ClaimReview</button>
+                        <button id="submit_claim" class="btn btn-primary mt-2">Create ClaimReview</button>
                     </div>
                     <div class="col-10">
                         <p class="mt-3 ml-4" >
@@ -79,27 +74,27 @@
             <div class="row">
                 <div class="col-5 mt-1 custom-controls-stacked">
                     <label id="valcheck_1" class="custom-control custom-checkbox">
-                        <input id="valcheck_1_ck" type="checkbox" class="custom-control-input">
+                        <input disabled id="valcheck_1_ck" type="checkbox" class="custom-control-input">
                         <span class="custom-control-indicator"></span>
                         <span id="valcheck_1_msg" class="custom-control-description">LDP-URI defined.</span>
                     </label>
                     <label id="valcheck_2" class="custom-control custom-checkbox">
-                        <input id="valcheck_2_ck" type="checkbox" class="custom-control-input">
+                        <input disabled id="valcheck_2_ck" type="checkbox" class="custom-control-input">
                         <span class="custom-control-indicator"></span>
                         <span id="valcheck_2_msg" class="custom-control-description">Tweet defined.</span>
                     </label>
                     <label  id="valcheck_3" class="custom-control custom-checkbox">
-                        <input id="valcheck_3_ck" type="checkbox" class="custom-control-input">
+                        <input disabled id="valcheck_3_ck" type="checkbox" class="custom-control-input">
                         <span class="custom-control-indicator"></span>
                         <span id="valcheck_3_msg" class="custom-control-description">Claim summarized.</span>
                     </label>
                     <label  id="valcheck_4" class="custom-control custom-checkbox">
-                        <input id="valcheck_4_ck" type="checkbox" class="custom-control-input">
+                        <input disabled id="valcheck_4_ck" type="checkbox" class="custom-control-input">
                         <span class="custom-control-indicator"></span>
                         <span id="valcheck_4_msg" class="custom-control-description">Claim reviewed.</span>
                     </label>
                     <label  id="valcheck_5" class="custom-control custom-checkbox">
-                        <input id="valcheck_5_ck" type="checkbox" class="custom-control-input">
+                        <input disabled id="valcheck_5_ck" type="checkbox" class="custom-control-input">
                         <span class="custom-control-indicator"></span>
                         <span id="valcheck_5_msg" class="custom-control-description">Claim rated.</span>
                     </label>
@@ -118,7 +113,7 @@
         </nav>
         <nav class="navbar fixed-bottom navbar-light bg-light">
             <span class="navbar-text">
-                Copyright &copy; 2017 <copyright holder><a href="factsmission.com" target="_blank">FactsMission</a> AG Biel/Bienne, Switzerland</copyright>. <strong> Twee-Fi</strong>, an Open Source Project. License: <a href="https://opensource.org/licenses/MIT" target="blank">MIT</a> Repo: <a href="https://github.com/factsmission/twee-fi" target="_blank"><img src="images/github-32px.png" alt="Twee-Fi on GitHub"></a>
+                Copyright &copy; 2017 <copyright holder><a href="https://factsmission.com" target="_blank">FactsMission</a> AG Biel/Bienne, Switzerland</copyright>. <strong> Twee-Fi</strong>, an Open Source Project. License: <a href="https://opensource.org/licenses/MIT" target="blank">MIT</a> Repo: <a href="https://github.com/factsmission/twee-fi" target="_blank"><img src="images/github-32px.png" alt="Twee-Fi on GitHub"></a>
             </span>
         </nav>
 
@@ -133,20 +128,21 @@
         <!-- UX components -->
         <script src="js/bootstrap-rating-input.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
-        <!-- <script src="js/twee-fi.js"></script> -->
-
-        <!-- Embedding current Tweet -->
-        <!-- Currently not working -->
+        <script src="js/twee-fi.js"></script>
+        
         <script>
             $(function () {
                 var searchParams = new URLSearchParams(window.location.search);
                 var tweetURL = searchParams.get("tweet");
+                //tweetInput
                 var tweetInput = document.getElementById("tweet_url");
-                tweetInput.value = tweetURL;
-                //why isn't this working?
-                if (tweetInput.hasAttribute("value")) {
+                $("#tweet_url").val(tweetURL);
+                if (tweetInput.value) {
                     tweetInput.disabled = true;
                 }
+                //twitframe
+                var twitframe = document.getElementById("twitframe");
+                twitframe.src = "https://twitframe.com/show?url="+encodeURIComponent(tweetURL);
             });
         </script>
     </body> 
