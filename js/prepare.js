@@ -1,11 +1,61 @@
 /* global SolidAuthClient, $rdf*/
 
 
+/**
+ * 
+ * Copied from solid-web-client
+ * 
+ * Parses a Link header.
+ * @method parseLinkHeader
+ *
+ * @param link {string} Contents of the Link response header
+ *
+ * @return {Object}
+ */
+function parseLinkHeader(link) {
+    if (!link) {
+        return {};
+    }
+
+    var linkexp = /<[^>]*>\s*(\s*;\s*[^\(\)<>@,;:"\/\[\]\?={} \t]+=(([^\(\)<>@,;:"\/\[\]\?={} \t]+)|("[^"]*")))*(,|$)/g;
+    var paramexp = /[^\(\)<>@,;:"\/\[\]\?={} \t]+=(([^\(\)<>@,;:"\/\[\]\?={} \t]+)|("[^"]*"))/g;
+    var matches = link.match(linkexp);
+    var rels = {};
+
+    for (var i = 0; i < matches.length; i++) {
+        var split = matches[i].split('>');
+        var href = split[0].substring(1);
+        var ps = split[1];
+        var s = ps.match(paramexp);
+
+        for (var j = 0; j < s.length; j++) {
+            var p = s[j];
+            var paramsplit = p.split('=');
+            // var name = paramsplit[0]
+            var rel = paramsplit[1].replace(/["']/g, '');
+
+            if (!rels[rel]) {
+                rels[rel] = [];
+            }
+
+            rels[rel].push(href);
+
+            if (rels[rel].length > 1) {
+                rels[rel].sort();
+            }
+        }
+    }
+
+    return rels;
+}
+
 function rdfFetch(uri, authIfNeeded = true) {
     return new Promise(function (resolve, reject) {
         var graph = $rdf.graph();
         var fetcher = new $rdf.Fetcher(graph, {fetch: SolidAuthClient.fetch});
-        fetcher.fetch(uri).then(function (response) {
+        fetcher.fetch(uri, {
+            "redirect": "follow"
+        }).then(function (response) {
             if (response.status < 300) {
                 response.graph = graph;
                 resolve(response);
@@ -83,6 +133,28 @@ function getStorageRootContainer() {
     });
 }
 
+/**
+ * 
+ * @return a Promise that is fullfilled if uri is an LDPC and rejected otherwise
+ */
+function assertLdpc(uri) {
+    if (uri.charAt(uri.length-1) != '/') {
+        uri = uri+'/';
+    }
+    return new Promise(function (resolve, reject) {
+        rdfFetch(uri).then(function (result) {
+            var links  = parseLinkHeader(result.headers.get("Link"));
+            if ((links.type.indexOf("http://www.w3.org/ns/ldp#Container") > -1)) {
+                resolve(uri);
+            } else {
+                reject();
+            }
+        }).catch(function(result) {
+            reject();
+        });
+    });
+}
+
 function createLdpc(base, name) {
     var severBase = getBaseURI(base);
     var body = '@prefix dct: <http://purl.org/dc/terms/> . \n@prefix ldp: <http://www.w3.org/ns/ldp#>. \n\n<> a ldp:BasicContainer ; \n\x09 dct:title "Containainer created by Twee-Fi" .';
@@ -99,17 +171,26 @@ function createLdpc(base, name) {
     });
 }
 
+function createLdpcIfNeeded(base, name) {
+    if (base.charAt(base.length-1) != '/') {
+        base = base+'/';
+    }
+    return assertLdpc(base+name).catch(function() {
+        return createLdpc(base, name);
+    });
+}
+
 function createPath(base, path) {
     var firstSlash = path.indexOf("/");
     if (firstSlash === -1) {
-        return createLdpc(base, path);
+        return createLdpcIfNeeded(base, path);
     } else {
         var first = path.substring(0, firstSlash);
         var rest = path.substring(firstSlash + 1);
         if (rest.length === 0) {
-            return createLdpc(base, first);
+            return createLdpcIfNeeded(base, first);
         } else {
-            return createLdpc(base, first).then(function (ldc) {
+            return createLdpcIfNeeded(base, first).then(function (ldc) {
                 return createPath(ldc, rest);
             });
         }
