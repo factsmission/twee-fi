@@ -75,14 +75,24 @@ $(function () {
     });
 
 
-    function check_tweet(value) {
-        // Regex-pattern to check URLs against: 
-        // https://twitter.com/<twitteruser>/status/<long number>
-        var urlRegex = /^https:\/\/twitter.com\/[a-zA-Z _.,!"'/$]+\/status\/[0-9]*$/;
-        if (urlRegex.test(value)) {
-            return true;
-        } else {
-            return false;
+    class TweetUri {
+        constructor(value) {
+            // Regex-pattern to check URLs against: 
+            // https://twitter.com/<twitteruser>/status/<long number>
+            var urlRegex = /^https:\/\/twitter.com\/([a-zA-Z _.,!"'/$]+)\/status\/([0-9]*$)/;
+            this.match = urlRegex.exec(value);
+        }
+        
+        isValid() {
+            return this.match != null;
+        }
+        
+        getUser() {
+            return this.match[1];
+        }
+        
+        getStatus() {
+            return this.match[2];
         }
     }
 
@@ -116,7 +126,7 @@ $(function () {
             $('#valcheck_1_msg').text(LDP_msg);
             $('#valcheck_1_ck').prop('checked', true);
         }
-        if (check_tweet($('#tweet_url').val()) == false) {
+        if (!(new TweetUri($('#tweet_url').val())).isValid()) {
             $('#valcheck_2_msg').text(Tweet_url_neg_msg);
             $('#valcheck_2_ck').prop('checked', false);
         } else {
@@ -166,7 +176,7 @@ $(function () {
         $('#claimreview_text').addClass('hide').removeClass('show');
         $("#cr-valid").removeClass("show").addClass("hide");
         $("#cr-invalid").removeClass("show").addClass("hide");
-        var thetweet = $('#tweet_url').val();
+        var tweetURI = $('#tweet_url').val();
         var today = new Date();
         var today_iso = today.toISOString().slice(0, 10);
         var rating_int = $('#rating-in-stars').val();
@@ -217,7 +227,7 @@ $(function () {
                 graph.add(claimReview, rdf("type"), schema("ClaimReview"));
                 graph.add(claimReview, schema("claimedReviewed"), claim_reviewed);
                 graph.add(claimReview, schema("reviewBody"), review_body);
-                var itemReviewed = $rdf.sym(thetweet);
+                var itemReviewed = $rdf.sym(tweetURI);
                 graph.add(claimReview, schema("itemReviewed"), itemReviewed);
                 graph.add(claimReview, schema("datePublished"), $rdf.literal(today_iso, schema("Date")));
                 var reviewRating = $rdf.blankNode();
@@ -234,13 +244,15 @@ $(function () {
                 } else {
                     var slug = default_timestamp();
                 }
+                var tweetUri = new TweetUri(tweetURI);
                 SolidUtils.getStorageRootContainer().then(function (root) {
-                    return SolidUtils.createPath(root.value + "public", "twee-fi").then(
+                    return SolidUtils.createPath(root.value + "public", "twee-fi/"+tweetUri.getUser()+"/"+tweetUri.getStatus()).then(
                             function (defaultContainer) {
                                 return SolidAuthClient.fetch(defaultContainer, {
                                     'method': 'POST',
-                                    'data': data,
+                                    'body': data,
                                     'headers': {
+                                        'Content-Type': 'text/turtle',
                                         'slug': slug
                                     }
                                 }).then(function (meta) {
