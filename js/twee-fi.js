@@ -1,8 +1,38 @@
-/*global $rdf, SolidAuthClient*/
+/*global $rdf, SolidAuthClient, SolidUtils*/
 
 var solid = require('solid');
 
-var webId = null;
+
+function createTest() {
+    SolidUtils.getStorageRootContainer().then(function (root) {
+        return SolidUtils.createPath(root.value + "public", "z/aa1/bb1/cc1/dd1");
+    }).then(function (result) {
+        alert(result);
+    });
+}
+
+function updateLoginInfo() {
+    SolidAuthClient.currentSession().then(function (session) {
+        var user = $rdf.sym(session.webId);
+        SolidUtils.rdfFetch(session.webId).then(function (response) {
+            var name = response.graph.any(user, vocab.foaf('name'));
+            $("#loginInfo").html("Logged in as: <a class='nav-link' href='" + session.webId + "'>" + name + "</a>");
+        });
+    });
+}
+
+$(function () {
+    SolidAuthClient.currentSession().then(function (session) {
+        if (session === null) {
+            SolidUtils.login().then(function () {
+                updateLoginInfo();
+            });
+        } else {
+            updateLoginInfo();
+        }
+    });
+});
+
 var vocab = {
     schema : function(suffix) {
         return $rdf.sym("http://schema.org/"+suffix);
@@ -20,60 +50,8 @@ var vocab = {
         return $rdf.sym("http://xmlns.com/foaf/0.1/"+suffix);
     }
 };
-var absolutePath = function(href) {
-    var link = document.createElement("a");
-    link.href = href;
-    return (link.protocol+"//"+link.host+link.pathname+link.search+link.hash);
-};
-var updateLoggingStatus = function() {
-    if(!webId) {
-       $("#loginInfo").html("Not logged in"); 
-    } else {
-        var user = $rdf.sym(webId);
-        var graph = $rdf.graph();
-        var fetcher = new $rdf.Fetcher(graph, { fetch: SolidAuthClient.fetch } );
-        fetcher.fetch(webId).then(function (response) {
-            var name = graph.any(user, vocab.foaf('name'));
-            $("#loginInfo").html("Logged in as: <a class='nav-link' href='"+webId+"'>"+name+"</a>");
-        });
-    }
-}
-var loadStorage = function() {
-    if (!webId) {
-        alert("No WebID available, login first");
-        return;
-    }
-    var user = $rdf.sym(webId);
-    var graph = $rdf.graph();
-    var fetcher = new $rdf.Fetcher(graph, { fetch: SolidAuthClient.fetch } );
-    fetcher.fetch(webId)
-          .then(function (response) {
-            var storage = graph.any(user, vocab.space('storage'));
-            console.log("Loading "+storage+" will dump to console");
-            var storageRootGraph = $rdf.graph();
-            var fetcher = new $rdf.Fetcher(storageRootGraph, { fetch: SolidAuthClient.fetch } );
-            fetcher.fetch(storage)
-                .then(function (response) {
-                    alert("Got "+storageRootGraph.length+" triples");
-                    console.log(response);
-                    console.log(storageRootGraph.toString());
-            })
-          });
-}
             
 $(function(){
-
-  $(".login").on('click',function() {
-        localStorage.removeItem("solid-auth-client");
-        var authPromise = SolidAuthClient.popupLogin({ popupUri: absolutePath('popup.html') });
-        authPromise.then(function(auth) {
-            webId = auth.webId;
-            updateLoggingStatus();
-        }).catch(function() {
-            webId = null;
-            alert("failed");
-        });
-    });
 
   function default_timestamp() {
     var momentNow = moment();
@@ -192,7 +170,6 @@ $(function(){
     $('#claimreview_text').addClass('hide').removeClass('show');
     $("#cr-valid").removeClass("show").addClass("hide");
     $("#cr-invalid").removeClass("show").addClass("hide");
-    var defaultContainer = $('#ldp-uri').val();
     var thetweet = $('#tweet_url').val();
     var today = new Date();
     var today_iso = today.toISOString().slice(0,10);
@@ -250,16 +227,27 @@ $(function(){
     } else {
       var slug = default_timestamp();
     }
-    solid.web.post(defaultContainer, data, slug).then(function(meta) {
-      console.log("Success! Sent payload to designated LDP-URI!");
-      $("#cr-valid").removeClass("hide").addClass("show");
-      $("#cr-invalid").removeClass("show").addClass("hide");
-    }).catch(function(err) {
-        // do something with the error
-        console.log(err);
-        $('#cr_error_msg').text(err);
-        $("#cr-invalid").addClass("show").removeClass("hide");
-        $("#cr-valid").removeClass("show").addClass("hide");
+    SolidUtils.getStorageRootContainer().then(function (root) {
+        return SolidUtils.createPath(root.value + "public","twee-fi").then(
+                function(defaultContainer) {
+            return SolidAuth.fetch(defaultContainer, {
+                'method' : 'POST',
+                'data': data,
+                'headers': {
+                    'slug': slug
+                }
+            }).then(function(meta) {
+              console.log("Success! Sent payload to designated LDP-URI!");
+              $("#cr-valid").removeClass("hide").addClass("show");
+              $("#cr-invalid").removeClass("show").addClass("hide");
+            }).catch(function(err) {
+                // do something with the error
+                console.log(err);
+                $('#cr_error_msg').text(err);
+                $("#cr-invalid").addClass("show").removeClass("hide");
+                $("#cr-valid").removeClass("show").addClass("hide");
+            });
+        });
     });
   });
 
