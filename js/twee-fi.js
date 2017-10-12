@@ -3,9 +3,6 @@
 "use strict";
 
 
-var solid = require('solid');
-
-
 function createTest() {
     SolidUtils.getStorageRootContainer().then(function (root) {
         return SolidUtils.createPath(root.value + "public", "z/aa1/bb1/cc1/dd1");
@@ -281,72 +278,4 @@ $(function () {
             }
         }
     });
-
-    // Display a particular ClaimReview
-
-    // list contents of the LDP
-    $('#list-ldp').on('click', function (event) {
-        var defaultContainer = $('#ldp-uri').val();
-        if (defaultContainer.length == 0) {
-            alert("You need to set the value of LDP-URI on the Select LDP-URI tab first.");
-            return;
-        }
-        $('#spinner').addClass('show').removeClass('hide');
-        $('#content_listing').empty();
-        var start_row = "<tr><td>";
-        var end_row = "</td><td><button class='btn-listing-show btn btn-sm btn-info mr-2'>show</button><button class='btn-listing-delete btn btn-sm btn-danger mr-2'>delete</button>"
-        var container = solid.web.get(defaultContainer)
-                .then(function (container) {
-                    for (i = 0; i < container.contentsUris.length; i++) {
-                        var new_row = start_row + container.contentsUris[i] + end_row;
-                        $('#content_listing').append(new_row);
-                    }
-                    $('#spinner').addClass('hide').removeClass('show');
-
-                    $('.btn-listing-show').on('click', function (event) {
-                        // prep
-                        $('#claim_review_listing_heading').text("");
-                        $('#claim_review_listing').text("");
-                        var targ = $(this).parent().parent().children('td:eq(0)');
-                        var targ_text = targ.text();
-                        solid.web.get(targ_text)
-                                .then(function (response) {
-                                    if (response.isContainer()) {
-                                        // ignore...
-                                    } else {
-                                        // Regular resource
-                                        // console.log('Raw resource: %s', response.raw())
-                                        the_response = response.raw()
-                                        // You can access the parsed graph (parsed by RDFLib.js):
-                                        // var parsedGraph = response.parsedGraph()
-                                        $('#claim_review_listing_heading').text(targ_text);
-                                        $('#claim_review_listing').text(the_response);
-                                        $('#show_claim_review').modal('show');
-                                    }
-                                })
-                                .catch(function (err) {
-                                    console.log(err) // error object
-                                })
-                    });
-                    $('.btn-listing-delete').on('click', function (event) {
-                        var targ = $(this).parent().parent().children('td:eq(0)');
-                        var targ_text = targ.text();
-                        console.log(targ_text);
-                        if (window.confirm("Delete ClaimReview?")) {
-                            solid.web.del(targ_text)
-                                    .then(function (response) {
-                                        console.log(response);
-                                        targ.parent().remove();
-                                    }).catch(function (err) {
-                                console.log(err); // error object
-                            });
-                        }
-                        ;
-                    });
-                });
-    });
-
-
-
-
 });
