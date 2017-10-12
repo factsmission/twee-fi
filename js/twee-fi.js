@@ -1,6 +1,6 @@
 /*global $rdf, SolidAuthClient, SolidUtils*/
 
-"use strict"
+"use strict";
 
 
 var solid = require('solid');
@@ -30,6 +30,8 @@ $(function () {
         if (session === null) {
             SolidUtils.login().then(function () {
                 updateLoginInfo();
+            }).catch(function(error) {
+                console.log("Couldn't log in: "+error);
             });
         } else {
             updateLoginInfo();
@@ -68,13 +70,13 @@ $(function () {
     $('#tweet_url').on('change keyup paste', function () {
         $("#tweet-valid").removeClass("show").addClass("hide");
         $("#tweet-invalid").removeClass("show").addClass("hide");
-        CheckData();
+        checkData();
     });
     $('#claim_reviewed, #ldp-uri, #review_body').on('change keyup paste', function () {
-        CheckData();
+        checkData();
     });
     $('#rating-in-stars').on('change', function () {
-        CheckData();
+        checkData();
     });
 
 
@@ -111,7 +113,7 @@ $(function () {
         }
     });
 
-    function CheckData() {
+    function checkData() {
         const LDP_neg_msg = "Missing LDP-URI.";
         const Tweet_url_neg_msg = "Missing Valid Tweet URL.";
         const Claim_neg_msg = "Missing Claim made in Tweet.";
