@@ -165,7 +165,12 @@ $(function () {
         $('#claim_reviewed').val("That Facebook has decided to relicense React & Friends to MIT.");
         $('#review_body').val("Wes Bos is a reliable developer and has no reason to lie.");
         $('#rating-in-stars').val(5);
-        $('#create-claim-review').trigger('click');
+    });
+
+    $('#update_tweet').on('click', function (event) {
+        var twitframe = document.getElementById("twitframe");
+        var tweetURI = $('#tweet_url').val();
+        twitframe.src = "https://twitframe.com/show?url=" + encodeURIComponent(tweetURI);
     });
 
     $('#submit_claim').on('click', function (event) {

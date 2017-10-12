@@ -1,16 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Twee-Fi Milestone 1">
-    <meta name="author" content=""> 
-    <title>Twee-Fi</title>
-    <link href='https://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css' />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
-    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/twee-fi.css" >
-
+    <head>
+        <title>Twee-Fi</title>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="Twee-Fi Milestone 1">
+        <meta name="author" content=""> 
+        <title>Twee-Fi</title>
+        <link href='https://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css' />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
+        <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
+        <link rel="stylesheet" href="css/twee-fi.css" >
+    </head>
+    
     <body>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
             <a class="navbar-brand" href="#">Twee-Fi</a>
@@ -23,10 +26,13 @@
                         <a class="nav-link" href="#">Write Review<span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">View Reviews</a>
+                        <a class="nav-link disabled" href="#">View Reviews</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link disabled" href="#">About</a>
+                    </li>
+                    <li>
+                        <button id="pop_claim" class="btn ml-2 btn-outline-info" type="button">Test populate</button>
                     </li>
                 </ul>
                 <ul class="navbar-nav">
@@ -42,13 +48,18 @@
         <div class="container-fluid">
             <h1 class="display-3">Review Tweet</h1>
             <div id="tweetview">
-                <iframe id="twitframe" height=250 width=550 ></iframe>
+                <iframe class="rounded border col-12" id="twitframe" height="200px"></iframe>
             </div>
 
             <form id="needs-validation" class="">
                 <div class="form-group">
                     <label for="tweet_url">Tweet URL:</label>
-                    <input type="text" class="form-control" id="tweet_url" placeholder="https://twitter.com/<twitteruser>/status/<long number>">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="tweet_url" placeholder="https://twitter.com/<twitteruser>/status/<long number>">
+                        <span class="input-group-btn">
+                            <button id="update_tweet" class="btn btn-secondary" type="button">Update</button>
+                        </span>
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="claim_reviewed">Summarize what the Tweet Claimed</label>
@@ -58,9 +69,6 @@
                 <div class="form-group">
                     <label for="review_body">What's your review of this Tweet?</label>
                     <textarea required id="review_body" rows="3" class="form-control" aria-describedby="The body of your review" placeholder="Review"></textarea>
-                    <div class="invalid-feedback" id="invalid">
-                        Something is missing...
-                    </div>
                 </div>
                 <div class="form-group">
                     <label for="rating-in-stars">Rate the truthfulness of the Claim:</label>
@@ -118,12 +126,12 @@
 
         <nav class="navbar navbar-light bg-light invisible">
             <span class="navbar-text">
-                Copyright &copy; 2017 <copyright holder><a href="#" target="_blank">FactsMission</a> AG Biel/Bienne, Switzerland</copyright>. <strong> Twee-Fi</strong>, an Open Source Project. License: <a href="#" target="blank">MIT</a> Repo: <a href="#" target="_blank"><img src="images/github-32px.png" alt="Twee-Fi on GitHub"></a>
+                Copyright &copy; 2017 <a href="#" target="_blank">FactsMission</a> AG Biel/Bienne, Switzerland. <strong> Twee-Fi</strong>, an Open Source Project. License: <a href="#" target="blank">MIT</a> Repo: <a href="#" target="_blank"><img src="images/github-32px.png" alt="Twee-Fi on GitHub"></a>
             </span>
         </nav>
         <nav class="navbar fixed-bottom navbar-light bg-light">
             <span class="navbar-text">
-                Copyright &copy; 2017 <copyright holder><a href="https://factsmission.com" target="_blank">FactsMission</a> AG Biel/Bienne, Switzerland</copyright>. <strong> Twee-Fi</strong>, an Open Source Project. License: <a href="https://opensource.org/licenses/MIT" target="blank">MIT</a> Repo: <a href="https://github.com/factsmission/twee-fi" target="_blank"><img src="images/github-32px.png" alt="Twee-Fi on GitHub"></a>
+                Copyright &copy; 2017 <a href="https://factsmission.com" target="_blank">FactsMission</a> AG Biel/Bienne, Switzerland. <strong> Twee-Fi</strong>, an Open Source Project. License: <a href="https://opensource.org/licenses/MIT" target="blank">MIT</a> Repo: <a href="https://github.com/factsmission/twee-fi" target="_blank"><img src="images/github-32px.png" alt="Twee-Fi on GitHub"></a>
             </span>
         </nav>
 
@@ -146,13 +154,13 @@
             $(function () {
                 var searchParams = new URLSearchParams(window.location.search);
                 var tweetURL = searchParams.get("tweet");
-                //tweetInput
+
                 var tweetInput = document.getElementById("tweet_url");
                 $("#tweet_url").val(tweetURL);
-                if (tweetInput.value) {
-                    tweetInput.disabled = true;
-                }
-                //twitframe
+                //if (tweetInput.value) {
+                //    tweetInput.disabled = true;
+                //}
+
                 var twitframe = document.getElementById("twitframe");
                 twitframe.src = "https://twitframe.com/show?url=" + encodeURIComponent(tweetURL);
             });
