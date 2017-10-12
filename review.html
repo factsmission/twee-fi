@@ -13,7 +13,7 @@
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
         <link rel="stylesheet" href="css/twee-fi.css" >
     </head>
-    
+
     <body>
         <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
             <a class="navbar-brand" href="#">Twee-Fi</a>
@@ -23,7 +23,7 @@
             <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Write Review<span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="index.html">Write new Review<span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link disabled" href="#">View Reviews</a>
@@ -51,28 +51,23 @@
                 <iframe class="rounded border col-12" id="twitframe" height="200px"></iframe>
             </div>
 
-            <form id="needs-validation" class="">
+            <form id="needs-validation">
                 <div class="form-group">
                     <label for="tweet_url">Tweet URL:</label>
-                    <div class="input-group">
-                        <input type="text" class="form-control" id="tweet_url" placeholder="https://twitter.com/<twitteruser>/status/<long number>">
-                        <span class="input-group-btn">
-                            <button id="update_tweet" class="btn btn-secondary" type="button">Update</button>
-                        </span>
-                    </div>
+                    <input type="text" class="form-control" readonly id="tweet_url" placeholder="https://twitter.com/<twitteruser>/status/<long number>">
                 </div>
                 <div class="form-group">
                     <label for="claim_reviewed">Summarize what the Tweet Claimed</label>
-                    <textarea required id="claim_reviewed" rows="3" class="form-control" aria-describedby="Claim you are reviewing" placeholder="Claim made in Tweet"></textarea>
+                    <textarea id="claim_reviewed" rows="3" class="form-control" aria-describedby="Claim you are reviewing" placeholder="Claim made in Tweet"></textarea>
                     <small id="claim_reviewedHelp" class="form-text text-muted">What does the tweet claim?</small>
                 </div>
                 <div class="form-group">
                     <label for="review_body">What's your review of this Tweet?</label>
-                    <textarea required id="review_body" rows="3" class="form-control" aria-describedby="The body of your review" placeholder="Review"></textarea>
+                    <textarea id="review_body" rows="3" class="form-control" aria-describedby="The body of your review" placeholder="Review"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="rating-in-stars">Rate the truthfulness of the Claim:</label>
-                    <input required type="number"  id="rating-in-stars" class="rating" data-clearable="reset rating" data-icon-lib="fa" data-active-icon="fa-star" data-inactive-icon="fa-star-o" data-clearable-icon="fa-trash-o" value="0" data-inline/>
+                    <input type="number"  id="rating-in-stars" class="rating" data-clearable="reset rating" data-icon-lib="fa" data-active-icon="fa-star" data-inactive-icon="fa-star-o" data-clearable-icon="fa-trash-o" value="0" data-inline/>
                 </div>
 
                 <div class="row">
@@ -87,6 +82,16 @@
                     </div>
                 </div>
             </form>
+
+            <div class="mt-2 alert alert-warning invisible" id="no_claim" role="alert">
+                Please summarize the tweet's claim.
+            </div>
+            <div class="mt-2 alert alert-warning invisible" id="no_body" role="alert">
+                Please review the tweet.
+            </div>
+            <div class="mt-2 alert alert-warning invisible" id="no_rating" role="alert">
+                Please rate the truthfulness.
+            </div>
 
             <h6 class="mt-4 text-uppercase">ClaimReview Status:</h6>
             <div class="row">

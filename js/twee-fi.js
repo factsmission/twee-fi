@@ -27,8 +27,8 @@ $(function () {
         if (session === null) {
             SolidUtils.login().then(function () {
                 updateLoginInfo();
-            }).catch(function(error) {
-                console.log("Couldn't log in: "+error);
+            }).catch(function (error) {
+                console.log("Couldn't log in: " + error);
             });
         } else {
             updateLoginInfo();
@@ -84,30 +84,34 @@ $(function () {
             var urlRegex = /^https:\/\/twitter.com\/([a-zA-Z _.,!"'/$]+)\/status\/([0-9]*$)/;
             this.match = urlRegex.exec(value);
         }
-        
+
         isValid() {
             return this.match != null;
         }
-        
+
         getUser() {
             return this.match[1];
         }
-        
+
         getStatus() {
             return this.match[2];
         }
     }
 
-    $('#check_tweet').on('click', function () {
+    $('#url_form_button').on('click', function () {
         // Regex-pattern to check URLs against: 
         // https://twitter.com/<twitteruser>/status/<long number>
         var urlRegex = /^https:\/\/twitter.com\/[a-zA-Z _.,!"'/$]+\/status\/[0-9]*$/;
         var tweet_url = $('#tweet_url').val();
-        if (check_tweet(tweet_url)) {
-            $("#tweet-valid").removeClass("hide").addClass("show");
+        if ((new TweetUri($('#tweet_url').val())).isValid()) {
+            $("#url_form").submit();
         } else {
-            $("#tweet-invalid").removeClass("hide").addClass("show");
+            $("#invalid_url").removeClass("invisible").addClass("visible");
         }
+    });
+
+    $('#tweet_url').on('change keyup paste', function () {
+        $("#invalid_url").removeClass("visible").addClass("invisible");
     });
 
     function checkData() {
@@ -138,23 +142,29 @@ $(function () {
         if ($('#claim_reviewed').val() == false) {
             $('#valcheck_3_msg').text(Review_body_neg_msg);
             $('#valcheck_3_ck').prop('checked', false);
+            $("#no_claim").removeClass("invisible").addClass("visible");
         } else {
             $('#valcheck_3_msg').text(Review_body_msg);
             $('#valcheck_3_ck').prop('checked', true);
+            $("#no_claim").removeClass("visible").addClass("invisible");
         }
         if ($('#review_body').val() == false) {
             $('#valcheck_4_msg').text(Claim_neg_msg);
             $('#valcheck_4_ck').prop('checked', false);
+            $("#no_body").removeClass("invisible").addClass("visible");
         } else {
             $('#valcheck_4_msg').text(Claim_msg);
             $('#valcheck_4_ck').prop('checked', true);
+            $("#no_body").removeClass("visible").addClass("invisible");
         }
         if ($('#rating-in-stars').val() == 0) {
             $('#valcheck_5_msg').text(Rating_neg_msg);
             $('#valcheck_5_ck').prop('checked', false);
+            $("#no_rating").removeClass("invisible").addClass("visible");
         } else {
             $('#valcheck_5_msg').text(Rating_msg);
             $('#valcheck_5_ck').prop('checked', true);
+            $("#no_rating").removeClass("visible").addClass("invisible");
         }
     }
     ;
@@ -253,7 +263,7 @@ $(function () {
                 }
                 var tweetUri = new TweetUri(tweetURI);
                 SolidUtils.getStorageRootContainer().then(function (root) {
-                    return SolidUtils.createPath(root.value + "public", "twee-fi/"+tweetUri.getUser()+"/"+tweetUri.getStatus()).then(
+                    return SolidUtils.createPath(root.value + "public", "twee-fi/" + tweetUri.getUser() + "/" + tweetUri.getStatus()).then(
                             function (defaultContainer) {
                                 return SolidAuthClient.fetch(defaultContainer, {
                                     'method': 'POST',

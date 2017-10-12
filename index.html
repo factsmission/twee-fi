@@ -24,7 +24,7 @@
             <div class="collapse navbar-collapse" id="navbarsExampleDefault">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" href="#">Write Review<span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="#">Write new Review<span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link disabled" href="#">View Reviews</a>
@@ -48,16 +48,20 @@
         </nav>
 
         <div class="container-fluid">
-            <h1 class="display-3">Enter Tweet URL</h1>
+            <h1 class="display-3">Enter tweet-URL</h1>
 
-            <form action="review.html?" method="get" class="">
+            <form id="url_form" action="review.html?" method="get">
                 <div class="form-group">
-                    <label for="tweet_url">Tweet URL:</label>
+                    <label for="tweet_url">Tweet-URL:</label>
                     <div class="input-group">
-                        <input name="tweet" type="text" class="form-control" id="tweet_url" placeholder="https://twitter.com/<twitteruser>/status/<long number>">
-                    </div> </div>
-                <input type="submit" class="btn btn-primary" value="Review this tweet">
+                        <input name="tweet" type="text" class="form-control" id="tweet_url" placeholder="https://twitter.com/{twitteruser}/status/{long number}">
+                    </div>
+                </div>
             </form>
+            <button id="url_form_button" class="btn btn--primary">Review this Tweet</button>
+            <div class="mt-2 alert alert-warning invisible" id="invalid_url" role="alert">
+                This tweet-URL seems not to be valid. All tweet-URLs have the following schema: https://twitter.com/{twitteruser}/status/{long number}
+            </div>
         </div>
 
         <nav class="navbar navbar-light bg-light invisible">
