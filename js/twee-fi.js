@@ -1,5 +1,8 @@
 /*global $rdf, SolidAuthClient, SolidUtils*/
 
+"use strict"
+
+
 var solid = require('solid');
 
 
