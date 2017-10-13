@@ -19,6 +19,19 @@ $(function () {
 });
 
 $(function () {
+    var searchParams = new URLSearchParams(window.location.search);
+    var tweetURL = searchParams.get("tweet");
+    if (!tweetURL) {
+        window.location.replace(SolidUtils.absolutePath("./"));
+    } else {
+        var tweetInput = document.getElementById("tweet_url");
+        $("#tweet_url").val(tweetURL);
+        var twitframe = document.getElementById("twitframe");
+        twitframe.src = "https://twitframe.com/show?url=" + encodeURIComponent(tweetURL);
+    }
+});
+
+$(function () {
 
     function default_timestamp() {
         var momentNow = moment();
@@ -82,7 +95,7 @@ $(function () {
             var data = createReview(tweetUri);
             submitReview(data, tweetUri).then(function (reviewURI) {
                 $("#cr-valid").removeClass("hide").addClass("show");
-                console.log("Forwarding to:  "+reviewURI);
+                console.log("Forwarding to:  " + reviewURI);
                 window.location.href = reviewURI;
             });
         }
@@ -110,7 +123,7 @@ $(function () {
                     return "May or may not be true";
             }
         }
-        
+
         var today = new Date();
         var today_iso = today.toISOString().slice(0, 10);
         var rating = Number($('#rating-in-stars').val());
@@ -136,8 +149,8 @@ $(function () {
 
     function submitReview(data, tweetUri) {
         return SolidUtils.getStorageRootContainer().then(function (root) {
-            return SolidUtils.createPath(root.value + "public", 
-                "twee-fi/" + tweetUri.getUser() + "/" + tweetUri.getStatus()).then(
+            return SolidUtils.createPath(root.value + "public",
+                    "twee-fi/" + tweetUri.getUser() + "/" + tweetUri.getStatus()).then(
                     function (defaultContainer) {
                         var slug = default_timestamp();
                         return SolidAuthClient.fetch(defaultContainer, {
@@ -149,7 +162,7 @@ $(function () {
                             }
                         }).then(function (result) {
                             console.log("Success! Sent payload to designated LDP-URI!");
-                            return SolidUtils.getBaseURI(defaultContainer)+result.headers.get("Location");
+                            return SolidUtils.getBaseURI(defaultContainer) + result.headers.get("Location");
                         }).catch(function (err) {
                             // do something with the error
                             console.log(err);

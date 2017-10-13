@@ -118,19 +118,5 @@
         <script src="js/twee-fi.js"></script>
         <script src="js/review.js"></script>
 
-        <script>
-            $(function () {
-                var searchParams = new URLSearchParams(window.location.search);
-                var tweetURL = searchParams.get("tweet");
-                if (!tweetURL) {
-                    window.location.replace(SolidUtils.absolutePath("./"));
-                } else {
-                    var tweetInput = document.getElementById("tweet_url");
-                    $("#tweet_url").val(tweetURL);
-                    var twitframe = document.getElementById("twitframe");
-                    twitframe.src = "https://twitframe.com/show?url=" + encodeURIComponent(tweetURL);
-                }
-            });
-        </script>
     </body> 
 </html>
