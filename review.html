@@ -31,9 +31,6 @@
                     <li class="nav-item">
                         <a class="nav-link disabled" href="#">About</a>
                     </li>
-                    <li>
-                        <button id="pop_claim" class="btn ml-2 btn-outline-info" type="button">Test populate</button>
-                    </li>
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item">
@@ -51,23 +48,33 @@
                 <iframe class="rounded border col-12" id="twitframe" height="200px"></iframe>
             </div>
 
-            <form id="needs-validation">
+            <form id="review-form" novalidate>
                 <div class="form-group">
                     <label for="tweet_url">Tweet URL:</label>
                     <input type="text" class="form-control" readonly id="tweet_url" placeholder="https://twitter.com/<twitteruser>/status/<long number>">
                 </div>
                 <div class="form-group">
                     <label for="claim_reviewed">Summarize what the Tweet Claimed</label>
-                    <textarea id="claim_reviewed" rows="3" class="form-control" aria-describedby="Claim you are reviewing" placeholder="Claim made in Tweet"></textarea>
+                    <textarea id="claim_reviewed" rows="3" class="form-control" aria-describedby="Claim you are reviewing" placeholder="Claim made in Tweet" required></textarea>
                     <small id="claim_reviewedHelp" class="form-text text-muted">What does the tweet claim?</small>
+                    <div class="invalid-feedback" id="no_claim">
+                        Please summarize the tweet's claim.
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="review_body">What's your review of this Tweet?</label>
-                    <textarea id="review_body" rows="3" class="form-control" aria-describedby="The body of your review" placeholder="Review"></textarea>
+                    <textarea id="review_body" rows="3" class="form-control" aria-describedby="The body of your review" placeholder="Review" required></textarea>
+                    <small id="claim_reviewedHelp" class="form-text text-muted">Here you justify your truthfulness rating.</small>
+                    <div class="invalid-feedback" id="no_body">
+                        Enter the text of your review.
+                    </div>
                 </div>
                 <div class="form-group">
                     <label for="rating-in-stars">Rate the truthfulness of the Claim:</label>
                     <input type="number"  id="rating-in-stars" class="rating" data-clearable="reset rating" data-icon-lib="fa" data-active-icon="fa-star" data-inactive-icon="fa-star-o" data-clearable-icon="fa-trash-o" value="0" data-inline/>
+                    <div class="invalid-feedback" id="no_rating">
+                        Please rate the truthfulness.
+                    </div>
                 </div>
 
                 <div class="row">
@@ -82,7 +89,7 @@
                     </div>
                 </div>
             </form>
-
+<!--
             <div class="mt-2 alert alert-warning invisible" id="no_claim" role="alert">
                 Please summarize the tweet's claim.
             </div>
@@ -92,8 +99,8 @@
             <div class="mt-2 alert alert-warning invisible" id="no_rating" role="alert">
                 Please rate the truthfulness.
             </div>
-
-            <h6 class="mt-4 text-uppercase">ClaimReview Status:</h6>
+-->
+            <!-- <h6 class="mt-4 text-uppercase">ClaimReview Status:</h6>
             <div class="row">
                 <div class="col-5 mt-1 custom-controls-stacked">
                     <label id="valcheck_1" class="custom-control custom-checkbox">
@@ -127,7 +134,7 @@
                 </div>
             </div>
 
-        </div>
+        </div> -->
 
         <nav class="navbar navbar-light bg-light invisible">
             <span class="navbar-text">
@@ -159,15 +166,14 @@
             $(function () {
                 var searchParams = new URLSearchParams(window.location.search);
                 var tweetURL = searchParams.get("tweet");
-
-                var tweetInput = document.getElementById("tweet_url");
-                $("#tweet_url").val(tweetURL);
-                //if (tweetInput.value) {
-                //    tweetInput.disabled = true;
-                //}
-
-                var twitframe = document.getElementById("twitframe");
-                twitframe.src = "https://twitframe.com/show?url=" + encodeURIComponent(tweetURL);
+                if (!tweetURL) {
+                    window.location.replace(SolidUtils.absolutePath("./"));
+                } else {
+                    var tweetInput = document.getElementById("tweet_url");
+                    $("#tweet_url").val(tweetURL);
+                    var twitframe = document.getElementById("twitframe");
+                    twitframe.src = "https://twitframe.com/show?url=" + encodeURIComponent(tweetURL);
+                }
             });
         </script>
     </body> 
