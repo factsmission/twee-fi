@@ -18,24 +18,6 @@ $(function () {
     });
 });
 
-var vocab = {
-    schema: function (suffix) {
-        return $rdf.sym("http://schema.org/" + suffix);
-    },
-    rdf: function (suffix) {
-        return $rdf.sym("http://www.w3.org/1999/02/22-rdf-syntax-ns#" + suffix);
-    },
-    solid: function (suffix) {
-        return $rdf.sym("http://www.w3.org/ns/solid/terms#" + suffix);
-    },
-    space: function (suffix) {
-        return $rdf.sym("http://www.w3.org/ns/pim/space#" + suffix);
-    },
-    foaf: function (suffix) {
-        return $rdf.sym("http://xmlns.com/foaf/0.1/" + suffix);
-    }
-};
-
 $(function () {
 
     function default_timestamp() {
@@ -119,18 +101,18 @@ $(function () {
             var graph = $rdf.graph();
 
             var claimReview = $rdf.sym("http://review.local/");
-            graph.add(claimReview, vocab.rdf("type"), vocab.schema("ClaimReview"));
-            graph.add(claimReview, vocab.schema("claimedReviewed"), claim_reviewed);
-            graph.add(claimReview, vocab.schema("reviewBody"), review_body);
+            graph.add(claimReview, SolidUtils.vocab.rdf("type"), SolidUtils.vocab.schema("ClaimReview"));
+            graph.add(claimReview, SolidUtils.vocab.schema("claimedReviewed"), claim_reviewed);
+            graph.add(claimReview, SolidUtils.vocab.schema("reviewBody"), review_body);
             var itemReviewed = $rdf.sym(tweetUri.toString());
-            graph.add(claimReview, vocab.schema("itemReviewed"), itemReviewed);
-            graph.add(claimReview, vocab.schema("datePublished"), $rdf.literal(today_iso, vocab.schema("Date")));
+            graph.add(claimReview, SolidUtils.vocab.schema("itemReviewed"), itemReviewed);
+            graph.add(claimReview, SolidUtils.vocab.schema("datePublished"), $rdf.literal(today_iso, SolidUtils.vocab.schema("Date")));
             var reviewRating = $rdf.blankNode();
-            graph.add(reviewRating, vocab.rdf("type"), vocab.schema("Rating"));
-            graph.add(reviewRating, vocab.schema("ratingValue"), rating);
-            graph.add(reviewRating, vocab.schema("alternateName"), rating_alt);
-            graph.add(claimReview, vocab.schema("reviewRating"), reviewRating);
-            graph.add(claimReview, vocab.schema("url"), claimReview);
+            graph.add(reviewRating, SolidUtils.vocab.rdf("type"), SolidUtils.vocab.schema("Rating"));
+            graph.add(reviewRating, SolidUtils.vocab.schema("ratingValue"), rating);
+            graph.add(reviewRating, SolidUtils.vocab.schema("alternateName"), rating_alt);
+            graph.add(claimReview, SolidUtils.vocab.schema("reviewRating"), reviewRating);
+            graph.add(claimReview, SolidUtils.vocab.schema("url"), claimReview);
             var data = new $rdf.Serializer(graph, $rdf.sym("https://twitter.com/")).setBase("http://review.local/").toN3(graph);
             $('#claimreview_text').val(data);
             $('#claimreview_text').addClass('show').removeClass('hide');
