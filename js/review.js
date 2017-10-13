@@ -70,6 +70,25 @@ $(function () {
         return formIsValid;
     }
 
+    form.on('submit', function (event) {
+        //preventin browser's default action also by returning false
+        event.preventDefault();
+        event.stopPropagation();
+        submissionAttempted = true;
+        $("#cr-valid").removeClass("show").addClass("hide");
+
+        if (checkForm()) {
+            var tweetUri = new TweeFiUtils.TweetUri($('#tweet_url').val());
+            var data = createReview(tweetUri);
+            submitReview(data, tweetUri).then(function (reviewURI) {
+                $("#cr-valid").removeClass("hide").addClass("show");
+                console.log("Forwarding to:  "+reviewURI);
+                window.location.href = reviewURI;
+            });
+        }
+        return false;
+    });
+
     /**
      * 
      * @returns {string} The review as N3
@@ -139,24 +158,4 @@ $(function () {
         });
     }
 
-    form.on('submit', function (event) {
-        //preventin browser's default action also by returning false
-        event.preventDefault();
-        event.stopPropagation();
-        submissionAttempted = true;
-        $("#cr-valid").removeClass("show").addClass("hide");
-
-
-        if (checkForm()) {
-            var tweetUri = new TweeFiUtils.TweetUri($('#tweet_url').val());
-            var data = createReview(tweetUri);
-            submitReview(data, tweetUri).then(function (reviewURI) {
-                $("#cr-valid").removeClass("hide").addClass("show");
-                console.log(reviewURI);
-            });
-
-
-        }
-        return false;
-    });
 });
