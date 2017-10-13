@@ -17,7 +17,7 @@ function updateLoginInfo() {
         SolidUtils.rdfFetch(session.webId).then(function (response) {
             var name = response.graph.any(user, vocab.foaf('name'));
             $("#loginInfo").html("Logged in as:");
-            $("#loginName").html("<a class='nav-link text-light' href='" + session.webId + "'>" + name + "</a>");
+            $("#loginName").html("<a class='nav-link' href='" + session.webId + "'>" + name + "</a>");
         });
     });
 }
