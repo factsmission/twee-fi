@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="Twee-Fi Milestone 1">
         <meta name="author" content=""> 
-        
+
         <link href='https://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css' />
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
@@ -48,7 +48,7 @@
         <div class="container-fluid">
             <h1 class="display-3">Review Tweet</h1>
             <div id="tweetview">
-                <iframe class="rounded border col-12" id="twitframe" height="200px"></iframe>
+                <iframe class="rounded border col-12" id="twitframe" height="200"></iframe>
             </div>
 
             <form id="review-form" novalidate>
@@ -57,7 +57,7 @@
                 </div>
                 <div class="form-group">
                     <label for="claim_reviewed">Summarize what the Tweet Claimed</label>
-                    <textarea id="claim_reviewed" rows="3" class="form-control" aria-describedby="Claim you are reviewing" placeholder="Claim made in Tweet" required></textarea>
+                    <textarea id="claim_reviewed" rows="3" class="form-control" aria-describedby="claim_reviewedHelp" placeholder="Claim made in Tweet" required></textarea>
                     <small id="claim_reviewedHelp" class="form-text text-muted">What does the tweet claim?</small>
                     <div class="invalid-feedback" id="no_claim">
                         Please summarize the tweet's claim.
@@ -65,8 +65,8 @@
                 </div>
                 <div class="form-group">
                     <label for="review_body">What's your review of this Tweet?</label>
-                    <textarea id="review_body" rows="3" class="form-control" aria-describedby="The body of your review" placeholder="Review" required></textarea>
-                    <small id="claim_reviewedHelp" class="form-text text-muted">Here you justify your truthfulness rating.</small>
+                    <textarea id="review_body" rows="3" class="form-control" aria-describedby="review_bodyHelp" placeholder="Review" required></textarea>
+                    <small id="review_bodyHelp" class="form-text text-muted">Here you justify your truthfulness rating.</small>
                     <div class="invalid-feedback" id="no_body">
                         Enter the text of your review.
                     </div>
@@ -90,7 +90,7 @@
                     </div>
                 </div>
             </form>
-
+        </div>
 
         <nav class="navbar navbar-light bg-light invisible">
             <span class="navbar-text">
@@ -117,6 +117,5 @@
         <script src="js/solid-utils.js"></script>
         <script src="js/twee-fi.js"></script>
         <script src="js/review.js"></script>
-
-    </body> 
+    </body>
 </html>
