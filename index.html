@@ -82,10 +82,24 @@
     <script src="https://solid.github.io/releases/solid.js/solid-0.14.1.min.js"></script>
     <script src="js/solid-auth-client.bundle.js"></script>
     <!-- UX components -->
-    <script src="js/bootstrap-rating-input.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.5.1/moment.min.js"></script>
     <script src="js/solid-utils.js"></script>
     <script src="js/twee-fi.js"></script>
+    <script>
+        $(function () {
+            TweeFiUtils.updateLoginInfo();
+        
+            $('#url_form_button').on('click', function () {
+                if ((new TweeFiUtils.TweetUri($('#tweet_url').val())).isValid()) {
+                    $("#url_form").submit();
+                } else {
+                    $("#invalid_url").removeClass("invisible").addClass("visible");
+                }
+            });
 
+            $('#tweet_url').on('change keyup paste', function () {
+                $("#invalid_url").removeClass("visible").addClass("invisible");
+            });
+        });
+    </script>
 </body>
 </html>
