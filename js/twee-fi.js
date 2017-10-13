@@ -93,10 +93,6 @@ $(function () {
     }
 
     $('#url_form_button').on('click', function () {
-        // Regex-pattern to check URLs against: 
-        // https://twitter.com/<twitteruser>/status/<long number>
-        var urlRegex = /^https:\/\/twitter.com\/[a-zA-Z _.,!"'/$]+\/status\/[0-9]*$/;
-        var tweet_url = $('#tweet_url').val();
         if ((new TweetUri($('#tweet_url').val())).isValid()) {
             $("#url_form").submit();
         } else {
@@ -138,7 +134,9 @@ $(function () {
         } else {
             $("#no_rating").hide();
         }
-        form.addClass("was-validated");
+        if (!formIsValid) {
+            form.addClass("was-validated");
+        }
         return formIsValid;
     }
     
@@ -150,7 +148,6 @@ $(function () {
         $('#claimreview_text').val("");
         $('#claimreview_text').addClass('hide').removeClass('show');
         $("#cr-valid").removeClass("show").addClass("hide");
-        $("#cr-invalid").removeClass("show").addClass("hide");
         var tweetUri = new TweetUri($('#tweet_url').val());
         var today = new Date();
         var today_iso = today.toISOString().slice(0, 10);
@@ -158,11 +155,7 @@ $(function () {
         var claim_reviewed = $('#claim_reviewed').val();
         var review_body = $('#review_body').val();
         
-        var formIsValid = checkForm();
-        
-        if (!formIsValid || (rating === 0)) {
-            $('#invalid').html("Please rate the truthfulness of the Tweet");            
-        } else {
+        if (checkForm()) {
             function ratingLabel(value) {
                 switch (value) {
                     case 1: return "Flat out lie";
@@ -213,12 +206,10 @@ $(function () {
                             }).then(function (meta) {
                                 console.log("Success! Sent payload to designated LDP-URI!");
                                 $("#cr-valid").removeClass("hide").addClass("show");
-                                $("#cr-invalid").removeClass("show").addClass("hide");
                             }).catch(function (err) {
                                 // do something with the error
                                 console.log(err);
                                 $('#cr_error_msg').text(err);
-                                $("#cr-invalid").addClass("show").removeClass("hide");
                                 $("#cr-valid").removeClass("show").addClass("hide");
                             });
                         });
