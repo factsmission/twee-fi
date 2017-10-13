@@ -29,12 +29,16 @@ TweeFiUtils = {
     },
     updateLoginInfo() {
         SolidAuthClient.currentSession().then(function (session) {
+            if (session) {
             var user = $rdf.sym(session.webId);
             SolidUtils.rdfFetch(session.webId).then(function (response) {
                 var name = response.graph.any(user, SolidUtils.vocab.foaf('name'));
                 $("#loginInfo").html("Logged in as:");
                 $("#loginName").html("<a class='nav-link' href='" + session.webId + "'>" + name + "</a>");
             });
+        } else {
+            $("#loginInfo").html("Not logged in");
+        }
         });
     }
 
