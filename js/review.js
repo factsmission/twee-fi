@@ -133,7 +133,7 @@ $(function () {
         var graph = $rdf.graph();
         var claimReview = $rdf.sym("http://review.local/");
         graph.add(claimReview, SolidUtils.vocab.rdf("type"), SolidUtils.vocab.schema("ClaimReview"));
-        graph.add(claimReview, SolidUtils.vocab.schema("claimedReviewed"), claim_reviewed);
+        graph.add(claimReview, SolidUtils.vocab.schema("claimReviewed"), claim_reviewed);
         graph.add(claimReview, SolidUtils.vocab.schema("reviewBody"), review_body);
         var itemReviewed = $rdf.sym(tweetUri.toString());
         graph.add(claimReview, SolidUtils.vocab.schema("itemReviewed"), itemReviewed);
