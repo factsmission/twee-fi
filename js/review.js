@@ -7,14 +7,12 @@
 $(function () {
     SolidAuthClient.currentSession().then(function (session) {
         if (session === null) {
-            SolidUtils.login().then(function () {
-                TweeFiUtils.updateLoginInfo();
-            }).catch(function (error) {
-                console.log("Couldn't log in: " + error);
-            });
+            SolidUtils.login();
         } else {
             TweeFiUtils.updateLoginInfo();
         }
+    }).catch(function(error) {
+        SolidUtils.login();
     });
 });
 

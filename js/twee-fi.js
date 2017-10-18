@@ -42,4 +42,6 @@ TweeFiUtils = {
         });
     }
 
-}
+};
+
+SolidUtils.postLoginAction = TweeFiUtils.updateLoginInfo; 

@@ -118,12 +118,18 @@ SolidUtils = {
      */
     login() {
         localStorage.clear();
-        return SolidAuthClient.popupLogin({popupUri: SolidUtils.absolutePath('popup.html')});
+        return SolidAuthClient.popupLogin(
+                {popupUri: SolidUtils.absolutePath('popup.html')}
+                ).then(SolidUtils.postLoginAction);
     },
 
+    postLoginAction(result) {
+        return result;
+    },
 
     getStorageRootContainer() {
         return SolidAuthClient.currentSession().then(function (session) {
+            if (session === null) return SolidUtils.login().then(SolidUtils.getStorageRootContainer)
             var user = $rdf.sym(session.webId);
             return SolidUtils.rdfFetch(session.webId)
                     .then(function (response) {
