@@ -47,6 +47,19 @@ SolidUtils = {
         return rels;
     },
 
+    fetch(uri, options) {
+        return SolidAuthClient.fetch(uri, options).then(function (response) {
+                if (!options.noLoginDialog && (response.status === 401)) {
+                    console.log("Got 401 response, attempting to login");
+                    return SolidUtils.login().then(function () {
+                        options.noLoginDialog = true;
+                        return SolidUtils.fetch(uri, options);
+                    });
+                } else {
+                    return response;
+                }
+            });
+    },
     /**
      * 
      * Fetches an RDF graph. If the server return 401 the login process will be 
@@ -60,7 +73,7 @@ SolidUtils = {
     rdfFetch(uri, authIfNeeded = true) {
         return new Promise(function (resolve, reject) {
             var graph = $rdf.graph();
-            var fetcher = new $rdf.Fetcher(graph, {fetch: SolidAuthClient.fetch});
+            var fetcher = new $rdf.Fetcher(graph, SolidUtils.fetch);
             fetcher.fetch(uri, {
                 "redirect": "follow"
             }).then(function (response) {
@@ -68,14 +81,7 @@ SolidUtils = {
                     response.graph = graph;
                     resolve(response);
                 } else {
-                    if (authIfNeeded && (response.status === 401)) {
-                        console.log("Got 401 response, attempting to login");
-                        return SolidUtils.login().then(function () {
-                            return SolidUtils.rdfFetch(uri, false);
-                        });
-                    } else {
-                        reject(response);
-                    }
+                    reject(response);
                 }
             });
         });

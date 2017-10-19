@@ -151,7 +151,7 @@ $(function () {
                     "twee-fi/" + tweetUri.getUser() + "/" + tweetUri.getStatus()).then(
                     function (defaultContainer) {
                         var slug = default_timestamp();
-                        return SolidAuthClient.fetch(defaultContainer, {
+                        return SolidUtils.fetch(defaultContainer, {
                             'method': 'POST',
                             'body': data,
                             'headers': {
@@ -160,6 +160,8 @@ $(function () {
                             }
                         }).then(function (result) {
                             console.log("Success! Sent payload to designated LDP-URI!");
+                            console.log("Location: "+result.headers.get("Location"));
+                            console.log("Response code: "+ result.status);
                             return SolidUtils.getBaseURI(defaultContainer) + result.headers.get("Location");
                         }).catch(function (err) {
                             // do something with the error
