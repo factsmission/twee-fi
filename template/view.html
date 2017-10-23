@@ -1,4 +1,19 @@
-<div id="reviewTemplate">
-  {{tweet}} {{claim}}
-  {{review}} {{rating}}
+<div id="reviewTemplates">
+  <div class="row">
+    <div class="col-5">
+      {{{tweetBlockquote}}}
+    </div>
+    <div class="col-7">
+      <br>
+      <h4>This tweet is about</h4>
+      {{claim}}
+
+      <br><hr/>
+
+      <h4>Review</h4>
+      {{{stars}}}
+      <br><br>
+      {{review}}
+    </div>
+  </div>
 </div>
