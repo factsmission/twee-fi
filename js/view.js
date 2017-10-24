@@ -23,7 +23,7 @@ $(function () {
             success: function (tweet) {
                 reviewObject.tweetBlockquote = tweet.html;
 
-                $("#muTemp").load("/template/view.html", function(res, status, xhr) {
+                $("#muTemp").load("./template/view.html", function(res, status, xhr) {
                     var template = document.getElementById('reviewTemplates').innerHTML;
                     var output = Mustache.render(template, reviewObject);
                     $("#tweets").append(output).fadeIn(2000);
