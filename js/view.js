@@ -33,36 +33,34 @@ $(function () {
 
 
     }
-
-    SolidUtils.login().then(function () {
-        TweeFiUtils.updateLoginInfo();
-        return SolidUtils.getStorageRootContainer().then(function (root) {
-            var rootURI = root.value + "public/twee-fi/";
-            var tweefiRoot = $rdf.sym(rootURI);
-            GraphNode(tweefiRoot).fetch().then(folder =>
+    
+    TweeFiUtils.updateLoginInfo();
+    return SolidUtils.getStorageRootContainer().then(function (root) {
+        var rootURI = root.value + "public/twee-fi/";
+        var tweefiRoot = $rdf.sym(rootURI);
+        GraphNode(tweefiRoot).fetch().then(folder =>
+        {
+            folder.out($rdf.sym("http://www.w3.org/ns/ldp#contains")).each(twitterUser =>
             {
-                folder.out($rdf.sym("http://www.w3.org/ns/ldp#contains")).each(twitterUser =>
-                {
-                    twitterUser.fetch().then(twitterUser => {
-                        twitterUser.out($rdf.sym("http://www.w3.org/ns/ldp#contains")).each(tweet => {
-                            tweet.fetch().then(tweet => {
-                                tweet.out($rdf.sym("http://www.w3.org/ns/ldp#contains")).each(review => {
-                                    review.fetch().then(review => {
-                                        //console.log(twitterUser.value, tweet.value, review.value);
-                                        drawReview(review);
-                                    });
+                twitterUser.fetch().then(twitterUser => {
+                    twitterUser.out($rdf.sym("http://www.w3.org/ns/ldp#contains")).each(tweet => {
+                        tweet.fetch().then(tweet => {
+                            tweet.out($rdf.sym("http://www.w3.org/ns/ldp#contains")).each(review => {
+                                review.fetch().then(review => {
+                                    //console.log(twitterUser.value, tweet.value, review.value);
+                                    drawReview(review);
                                 });
                             });
                         });
                     });
-                    /*return SolidAuthClient.fetch(contained.value, {
-                        method: 'delete'
-                    }).then(response => console.log(response));*/
                 });
+                /*return SolidAuthClient.fetch(contained.value, {
+                    method: 'delete'
+                }).then(response => console.log(response));*/
             });
-        }).catch(function (error) {
-            console.log("Couldn't log in: " + error);
         });
-
+    }).catch(function (error) {
+        console.log("Couldn't get storage root: " + error);
     });
+
 });
