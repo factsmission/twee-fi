@@ -5,16 +5,16 @@
 
 
 $(function () {
-    SolidAuthClient.currentSession().then(function (session) {
-        if (session === null) {
-            SolidUtils.login().then(function () {
-                TweeFiUtils.updateLoginInfo();
-            }).catch(function (error) {
-                console.log("Couldn't log in: " + error);
-            });
-        } else {
-            TweeFiUtils.updateLoginInfo();
-        }
+    TweeFiUtils.updateLoginInfo();
+    
+    $('#logoutButton').on('click', function () {
+        localStorage.clear();
+        TweeFiUtils.updateLoginInfo();
+    });
+
+    $('#loginButton').on('click', function () {
+        TweeFiUtils.login();
+        TweeFiUtils.updateLoginInfo();
     });
 });
 
@@ -90,15 +90,29 @@ $(function () {
         submissionAttempted = true;
         $("#cr-valid").removeClass("show").addClass("hide");
 
-        if (checkForm()) {
-            var tweetUri = new TweeFiUtils.TweetUri($('#tweet_url').val());
-            var data = createReview(tweetUri);
-            submitReview(data, tweetUri).then(function (reviewURI) {
-                $("#cr-valid").removeClass("hide").addClass("show");
-                console.log("Forwarding to:  " + reviewURI);
-                window.location.href = reviewURI;
-            });
-        }
+        SolidAuthClient.currentSession().then(function (session) {
+            if (session === null) {
+                SolidUtils.login().then(function () {
+
+                    if (checkForm()) {
+                        var tweetUri = new TweeFiUtils.TweetUri($('#tweet_url').val());
+                        var data = createReview(tweetUri);
+                        submitReview(data, tweetUri).then(function (reviewURI) {
+                            $("#cr-valid").removeClass("hide").addClass("show");
+                            console.log("Forwarding to:  " + reviewURI);
+                            window.location.href = reviewURI;
+                        });
+                    }
+
+                    TweeFiUtils.updateLoginInfo();
+                }).catch(function (error) {
+                    console.log("Couldn't log in: " + error);
+                });
+            } else {
+                TweeFiUtils.updateLoginInfo();
+            }
+        });
+
         return false;
     });
 

@@ -41,6 +41,10 @@
                 <li class="nav-item" id="loginName">
                     <!-- Auto-filled -->
                 </li>
+                <li class="nav-item">
+                    <button id="logoutButton" class="btn btn-outline-info mx-2 hide">Logout</button>
+                    <button id="loginButton" class="btn btn-outline-info mx-2">Login</button>
+                </li>
             </ul>
         </div>
     </nav>
@@ -63,7 +67,7 @@
             <a href="https://factsmission.com">FactsMission</a> is a Swiss Company
             founded in 2017 with the goal to use Linked Data technologies
             to promote the ability to identify facts and to fight fake news on the web.
-            
+
             FactsMission is a member of the
             <a href="https://w3.org">W3C</a>.
         </p>
@@ -94,7 +98,7 @@
     <script>
         $(function () {
             TweeFiUtils.updateLoginInfo();
-        
+
             $('#url_form_button').on('click', function () {
                 if ((new TweeFiUtils.TweetUri($('#tweet_url').val())).isValid()) {
                     $("#url_form").submit();
@@ -106,6 +110,16 @@
             $('#tweet_url').on('change keyup paste', function () {
                 $("#invalid_url").removeClass("visible").addClass("invisible");
             });
+        });
+
+        $('#logoutButton').on('click', function () {
+            localStorage.clear();
+            TweeFiUtils.updateLoginInfo();
+        });
+
+        $('#loginButton').on('click', function () {
+            TweeFiUtils.login();
+            TweeFiUtils.updateLoginInfo();
         });
     </script>
 </body>

@@ -34,12 +34,16 @@
                     <a class="nav-link" href="about.html">About</a>
                 </li>
             </ul>
-            <ul class="navbar-nav">
+            <ul class="navbar-nav my-auto">
                 <li class="nav-item">
                     <span class="navbar-text" id="loginInfo">Not logged in</span>
                 </li>
                 <li class="nav-item" id="loginName">
                     <!-- Auto-filled -->
+                </li>
+                <li class="nav-item">
+                    <button id="logoutButton" class="btn btn-outline-info mx-2 hide">Logout</button>
+                    <button id="loginButton" class="btn btn-outline-info mx-2">Login</button>
                 </li>
             </ul>
         </div>
@@ -87,7 +91,7 @@
     <script>
         $(function () {
             TweeFiUtils.updateLoginInfo();
-        
+
             $('#url_form_button').on('click', function () {
                 if ((new TweeFiUtils.TweetUri($('#tweet_url').val())).isValid()) {
                     $("#url_form").submit();
@@ -98,6 +102,16 @@
 
             $('#tweet_url').on('change keyup paste', function () {
                 $("#invalid_url").removeClass("visible").addClass("invisible");
+            });
+
+            $('#logoutButton').on('click', function () {
+                localStorage.clear();
+                TweeFiUtils.updateLoginInfo();
+            });
+
+            $('#loginButton').on('click', function () {
+                TweeFiUtils.login();
+                TweeFiUtils.updateLoginInfo();
             });
         });
     </script>
