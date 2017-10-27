@@ -64,6 +64,5 @@ $(function () {
         SolidUtils.login().catch(function (error) {
             console.log("Couldn't log in: " + error);
         });
-        TweeFiUtils.updateLoginInfo();
     });
 });
