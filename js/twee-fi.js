@@ -30,18 +30,40 @@ TweeFiUtils = {
     updateLoginInfo() {
         SolidAuthClient.currentSession().then(function (session) {
             if (session) {
-            var user = $rdf.sym(session.webId);
-            SolidUtils.rdfFetch(session.webId).then(function (response) {
-                var name = response.graph.any(user, SolidUtils.vocab.foaf('name'));
-                $("#loginInfo").html("Logged in as:");
-                $("#loginName").html("<a class='nav-link' href='" + session.webId + "'>" + name + "</a>");
-            });
-        } else {
-            $("#loginInfo").html("Not logged in");
-        }
+                var user = $rdf.sym(session.webId);
+                SolidUtils.rdfFetch(session.webId).then(function (response) {
+                    var name = response.graph.any(user, SolidUtils.vocab.foaf('name'));
+                    $("#loginInfo").html("Logged in as:");
+                    $("#loginName").show();
+                    $("#loginName").html("<a class='nav-link' href='" + session.webId + "'>" + name + "</a>");
+                    $("#logoutButton").show();
+                    $("#loginButton").hide();
+                });
+            } else {
+                $("#loginInfo").html("Not logged in");
+                $("#loginName").hide();
+                $("#logoutButton").hide();
+                $("#loginButton").show();
+            }
         });
-    }
+    },
 
 };
 
 SolidUtils.postLoginAction = TweeFiUtils.updateLoginInfo; 
+
+$(function () {
+    TweeFiUtils.updateLoginInfo();
+    
+    $('#logoutButton').on('click', function () {
+        localStorage.clear();
+        TweeFiUtils.updateLoginInfo();
+    });
+
+    $('#loginButton').on('click', function () {
+        SolidUtils.login().catch(function (error) {
+            console.log("Couldn't log in: " + error);
+        });
+        TweeFiUtils.updateLoginInfo();
+    });
+});
