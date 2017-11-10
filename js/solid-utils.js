@@ -73,7 +73,9 @@ SolidUtils = {
     rdfFetch(uri, authIfNeeded = true) {
         return new Promise(function (resolve, reject) {
             var graph = $rdf.graph();
-            var fetcher = new $rdf.Fetcher(graph, SolidUtils.fetch);
+            var fetcher = new $rdf.Fetcher(graph, {
+                "fetch" :SolidUtils.fetch
+            });
             fetcher.fetch(uri, {
                 "redirect": "follow"
             }).then(function (response) {
