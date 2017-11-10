@@ -47,7 +47,7 @@ SolidUtils = {
         return rels;
     },
 
-    fetch(uri, options) {
+    fetch(uri, options = {}) {
         return SolidAuthClient.fetch(uri, options).then(function (response) {
                 if (!options.noLoginDialog && (response.status === 401)) {
                     console.log("Got 401 response, attempting to login");
