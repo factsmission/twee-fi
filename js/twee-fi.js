@@ -6,7 +6,7 @@ TweeFiUtils = {
         constructor(value) {
             // Regex-pattern to check URLs against: 
             // https://twitter.com/<twitteruser>/status/<long number>
-            var urlRegex = /^https:\/\/twitter.com\/([a-zA-Z _.,!"'/$]+)\/status\/([0-9]*$)/;
+            var urlRegex = /^https:\/\/twitter.com\/([a-zA-Z0-9_.,!"'/$]+)\/status\/([0-9]*$)/;
             this.match = urlRegex.exec(value);
             this.value = value;
         }
