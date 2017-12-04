@@ -7,6 +7,7 @@ $(function () {
         reviewObject.claim = review.out(SolidUtils.vocab.schema("claimReviewed")).value;
         reviewObject.review = review.out(SolidUtils.vocab.schema("reviewBody")).value;
         reviewObject.rating = review.out(SolidUtils.vocab.schema("reviewRating")).out(SolidUtils.vocab.schema("ratingValue")).value;
+        reviewObject.uri = review.value;
         //console.log(reviewObject);
 
         reviewObject.stars = "";
