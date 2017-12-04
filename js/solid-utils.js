@@ -175,7 +175,7 @@ SolidUtils = {
 
     createLdpc(base, name) {
         var severBase = SolidUtils.getBaseURI(base);
-        var body = '@prefix dct: <http://purl.org/dc/terms/> . \n@prefix ldp: <http://www.w3.org/ns/ldp#>. \n\n<> a ldp:BasicContainer ; \n\x09 dct:title "Containainer created by Twee-Fi" .';
+        var body = '@prefix dct: <http://purl.org/dc/terms/> . \n@prefix ldp: <http://www.w3.org/ns/ldp#>. \n\n<> a ldp:BasicContainer .';
         return SolidAuthClient.fetch(base, {
             'method': 'POST',
             'body': body,
