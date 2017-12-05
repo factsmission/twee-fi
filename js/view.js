@@ -74,7 +74,7 @@ $(function () {
                                 method: 'delete'
                             }).then(response => {
                                 console.log(response);
-                                if (response.OK) {
+                                if (response.ok) {
                                     review.remove();
                                 } else {
                                     alert(response.body);
