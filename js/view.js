@@ -77,7 +77,7 @@ $(function () {
                                 if (response.ok) {
                                     review.remove();
                                 } else {
-                                    alert(response.body);
+                                    response.text().then(msg => alert(msg));
                                 }
                                 
                             });
