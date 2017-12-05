@@ -65,11 +65,26 @@ $(function () {
     }).then(() => {
         console.log("adding event listner to "+$(".delete").length+" elements");
         $(".delete").click(e => {
-            if (confirm("Delete "+ e.target.value+"?")) {
-                return SolidAuthClient.fetch(e.target.value, {
-                        method: 'delete'
-                    }).then(response => console.log(response));
-            }
+            var review = $(e.target).closest(".review");
+            var origBG = review.css("background-color");
+            review.css( "background-color", "red" )
+            setTimeout(() => { 
+                    if (confirm("Delete "+ e.target.value+"?")) {
+                        return SolidAuthClient.fetch(e.target.value, {
+                                method: 'delete'
+                            }).then(response => {
+                                console.log(response);
+                                if (response.OK) {
+                                    review.remove();
+                                } else {
+                                    alert(response.body);
+                                }
+                                
+                            });
+                    } else {
+                        review.css( "background-color", origBG)
+                    }
+                }, 1);
         });
     });
     
