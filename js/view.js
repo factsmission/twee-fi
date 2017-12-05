@@ -36,6 +36,7 @@ $(function () {
     }
     
     TweeFiUtils.updateLoginInfo();
+    var reviewCount = 0;
     SolidUtils.getStorageRootContainer().then(function (root) {
         var rootURI = root.value + "public/twee-fi/";
         var tweefiRoot = $rdf.sym(rootURI);
@@ -49,20 +50,21 @@ $(function () {
                             return tweet.out($rdf.sym("http://www.w3.org/ns/ldp#contains")).each(review => {
                                 return review.fetch().then(review => {
                                     //console.log(twitterUser.value, tweet.value, review.value);
+                                    reviewCount++;
                                     return drawReview(review);
                                 });
                             });
                         });
                     });
                 });
-                /*return SolidAuthClient.fetch(contained.value, {
-                    method: 'delete'
-                }).then(response => console.log(response));*/
             });
         });
     }).catch(function (error) {
         console.log("Couldn't get storage root: " + error);
     }).then(() => {
+        if (reviewCount === 0) {
+            $("#tweets").append("No reviews! Go review some tweets.");
+        }
         console.log("adding event listner to "+$(".delete").length+" elements");
         $(".delete").click(e => {
             var review = $(e.target).closest(".review");
