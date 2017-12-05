@@ -47,6 +47,14 @@ SolidUtils = {
         return rels;
     },
 
+    /**
+     * Fetches a resource, authenticating when needed an initiating the login
+     * process if necessary.
+     * 
+     * @param {type} uri
+     * @param {type} options
+     * @return {unresolved}
+     */
     fetch(uri, options = {}) {
         return SolidAuthClient.fetch(uri, options).then(function (response) {
                 if (!options.noLoginDialog && (response.status === 401)) {
@@ -131,10 +139,21 @@ SolidUtils = {
                 ).then(SolidUtils.postLoginAction);
     },
 
+    /**
+     * This method is executed after login. This is typically overwritten with
+     * an implementation displaying the current user at an appropriate place
+     * 
+     * @param {Object} the result from the login operation
+     * @return {Object} this function should return what it got as argument
+     */
     postLoginAction(result) {
         return result;
     },
-
+    /**
+     * 
+     * @return {Promise<URI>} a promise for the storage of the current user, if 
+     * no user is logged in the log-in process is triggered
+     */
     getStorageRootContainer() {
         return SolidAuthClient.currentSession().then(function (session) {
             if (session === null) return SolidUtils.login().then(SolidUtils.getStorageRootContainer)
@@ -173,6 +192,13 @@ SolidUtils = {
         });
     },
 
+    /**
+     * Creates an LDPC withthe specified name as the specified base location.
+     * 
+     * @param {string} base
+     * @param {string} name
+     * @return {Promise}
+     */
     createLdpc(base, name) {
         var severBase = SolidUtils.getBaseURI(base);
         var body = '@prefix dct: <http://purl.org/dc/terms/> . \n@prefix ldp: <http://www.w3.org/ns/ldp#>. \n\n<> a ldp:BasicContainer .';
@@ -193,8 +219,8 @@ SolidUtils = {
      * Ensures that a specified LDPC hierarchy path exists, it creates those
      * LDPC that do not yet exist 
      *  
-     * @param {type} base
-     * @param {type} path
+     * @param {string} base
+     * @param {string} path
      * @return {Promise}
      */
     createPath(base, path) {
