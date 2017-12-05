@@ -18,38 +18,38 @@ $(function () {
             reviewObject.stars += '<i class="fa fa-star-o"></i>';
         }
 
-        $.ajax({
+        return $.ajax({
             url: "https://publish.twitter.com/oembed?url=" + reviewObject.tweet,
-            dataType: 'jsonp',
-            success: function (tweet) {
+            dataType: 'jsonp'
+        }).then(
+            function (tweet) {
                 reviewObject.tweetBlockquote = tweet.html;
 
-                $("#muTemp").load("./template/view.html", function(res, status, xhr) {
-                    var template = document.getElementById('reviewTemplates').innerHTML;
+                return $.ajax("./template/view.html").then(function(template) {
+                    //var template = document.getElementById('reviewTemplates').innerHTML;
                     var output = Mustache.render(template, reviewObject);
                     $("#tweets").append(output).fadeIn(2000);
                 });
-            }
-        });
+            });
 
 
     }
     
     TweeFiUtils.updateLoginInfo();
-    return SolidUtils.getStorageRootContainer().then(function (root) {
+    SolidUtils.getStorageRootContainer().then(function (root) {
         var rootURI = root.value + "public/twee-fi/";
         var tweefiRoot = $rdf.sym(rootURI);
-        GraphNode(tweefiRoot).fetch().then(folder =>
+        return GraphNode(tweefiRoot).fetch().then(folder =>
         {
-            folder.out($rdf.sym("http://www.w3.org/ns/ldp#contains")).each(twitterUser =>
+            return folder.out($rdf.sym("http://www.w3.org/ns/ldp#contains")).each(twitterUser =>
             {
-                twitterUser.fetch().then(twitterUser => {
-                    twitterUser.out($rdf.sym("http://www.w3.org/ns/ldp#contains")).each(tweet => {
-                        tweet.fetch().then(tweet => {
-                            tweet.out($rdf.sym("http://www.w3.org/ns/ldp#contains")).each(review => {
-                                review.fetch().then(review => {
+                return twitterUser.fetch().then(twitterUser => {
+                    return twitterUser.out($rdf.sym("http://www.w3.org/ns/ldp#contains")).each(tweet => {
+                        return tweet.fetch().then(tweet => {
+                            return tweet.out($rdf.sym("http://www.w3.org/ns/ldp#contains")).each(review => {
+                                return review.fetch().then(review => {
                                     //console.log(twitterUser.value, tweet.value, review.value);
-                                    drawReview(review);
+                                    return drawReview(review);
                                 });
                             });
                         });
@@ -62,6 +62,17 @@ $(function () {
         });
     }).catch(function (error) {
         console.log("Couldn't get storage root: " + error);
+    }).then(() => {
+        console.log("adding event listner to "+$(".delete").length+" elements");
+        $(".delete").click(e => {
+            if (confirm("Delete "+ e.target.value+"?")) {
+                return SolidAuthClient.fetch(e.target.value, {
+                        method: 'delete'
+                    }).then(response => console.log(response));
+            }
+        });
     });
-
+    
+    
+    
 });
