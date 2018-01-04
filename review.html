@@ -7,7 +7,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <meta name="description" content="Twee-Fi Milestone 1">
         <meta name="author" content="">
-        
+
         <link rel="icon" type="img/ico" href="images/Favicon.ico">
 
         <link href='https://fonts.googleapis.com/css?family=Roboto:400,300' rel='stylesheet' type='text/css' />
@@ -19,7 +19,7 @@
     <body>
         <nav class="navbar navbar-expand-md navbar-light bg-light border-bottom fixed-top">
             <a class="navbar-brand" href="./">
-                <img class="align-middle" src="images/icon.png" style="height: 30px" alt="">
+                <img class="align-middle" src="images/logo.png" style="height: 30px" alt="">
             </a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -44,8 +44,8 @@
                         <!-- Auto-filled -->
                     </li>
                     <li class="nav-item">
-                        <button id="logoutButton" class="btn btn-outline-info mx-2 hide">Logout</button>
-                        <button id="loginButton" class="btn btn-outline-info mx-2">Login</button>
+                        <button id="logoutButton" class="btn btn-outline-secondary mx-2 hide">Logout</button>
+                        <button id="loginButton" class="btn btn-outline-secondary mx-2">Login</button>
                     </li>
                 </ul>
             </div>
@@ -84,17 +84,22 @@
                     </div>
                 </div>
 
-                <div class="row">
-                    <div class="col-2">
-                        <button id="submit_claim" type="submit" class="btn btn-primary mt-2">Create ClaimReview</button>
-                    </div>
-                    <div class="col-10">
-                        <p class="mt-3 ml-4" >
-                            <span id="cr-valid" class="text-success fade hide">ClaimReview successfully filed!</span>
-                        </p>
-                    </div>
-                </div>
+                <button id="submit_claim" type="submit" class="btn btn-primary my-3">Create ClaimReview</button>
             </form>
+
+            <div id="cr-valid" class="alert alert-success fade hide">
+                ClaimReview successfully created.
+            </div>
+
+            <div class="alert alert-warning invisible" id="firsttime">
+                Thank you for posting your first review. The review is now getting published at <a id="reviewURI" href="">[reviewURI]</a> where it might be found by search engines.
+                <hr>
+                For your rating to be accessed by the twee-fi browser plugin we ask you to create an issue with the subject "Please add <a id="repoURI" href="">[repoURI]</a> to the aggregator" <a href="https://github.com/factsmission/twee-fi-aggregator/issues">here</a>.
+                <hr>
+                This message will not be shown again.
+                <button type="button" id="dismissFirsttime" class="btn btn-primary mx-3">I understand</button>
+            </div>
+
         </div>
 
         <nav class="navbar navbar-light bg-light invisible">
