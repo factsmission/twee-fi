@@ -34,7 +34,7 @@ $(function () {
     function default_timestamp() {
         var momentNow = moment();
         return "FactsMission--" + momentNow.format('YYYY-MM-DD') + '-'
-                + momentNow.format('dddd').substring(0, 3).toUpperCase() + "-" + momentNow.format('Ahhmmss');
+            + momentNow.format('dddd').substring(0, 3).toUpperCase() + "-" + momentNow.format('Ahhmmss');
     }
 
     $('#default_timestamp').html(default_timestamp());
@@ -93,25 +93,33 @@ $(function () {
             var data = createReview(tweetUri);
             submitReview(data, tweetUri).then(function (submitResult) {
                 $("#cr-valid").removeClass("hide").addClass("show");
+                function showFirstReviewInfo() {
+                    return new Promise((accept, reject) => {
+                        $("#reviewURI").html(submitResult.rootValue + "publictwee-fi/" + tweetUri.getUser() + "/" + tweetUri.getStatus());
+                        $("#repoURI").html(submitResult.rootValue);
+                        $("#reviewURI").attr("href", submitResult.rootValue + "publictwee-fi/" + tweetUri.getUser() + "/" + tweetUri.getStatus());
+                        $("#repoURI").attr("href", submitResult.rootValue);
+                        $("#firsttime").removeClass("invisible").addClass("visible");
+
+                        $("#dismissFirsttime").on("click", () => {
+                            $("#firsttime").removeClass("visible").addClass("visible");
+                            $("#cr-valid").removeClass("alert-success").addClass("alert-danger");
+                            $("#cr-valid").html("Redirecting...");
+                            setTimeout(accept, 1000);
+                        });
+                    });
+                }
+                function showSuccesConfirmation() {
+                    return new Promise((accept, reject) => {
+                        $("#cr-valid").html("ClaimReview successfully created. Redirecting...");
+                        setTimeout(accept, 5000);
+                    });
+                }
+                
                 let firstReview = submitResult.firstReview;
-                if (firstReview) {
-                    $("#reviewURI").html(submitResult.rootValue + "publictwee-fi/" + tweetUri.getUser() + "/" + tweetUri.getStatus());
-                    $("#repoURI").html(submitResult.rootValue);
-                    $("#reviewURI").attr("href", submitResult.rootValue + "publictwee-fi/" + tweetUri.getUser() + "/" + tweetUri.getStatus());
-                    $("#repoURI").attr("href", submitResult.rootValue);
-                    $("#firsttime").removeClass("invisible").addClass("visible");
-                }
-                if (!firstReview) {
-                    $("#cr-valid").html("ClaimReview successfully created. Redirecting...");
+                (firstReview ? showFirstReviewInfo() : showSuccesConfirmation()).then(() => {
                     console.log("Forwarding to: " + submitResult.reviewUri);
-                    setTimeout(window.location.href = submitResult.reviewUri, "5000");
-                }
-                $("#dismissFirsttime").on("click", () => {
-                    $("#firsttime").removeClass("visible").addClass("visible");
-                    $("#cr-valid").removeClass("alert-success").addClass("alert-danger");
-                    $("#cr-valid").html("Redirecting...");
-                    console.log("Forwarding to: " + submitResult.reviewUri);
-                    setTimeout(window.location.href = submitResult.reviewUri, "10000");
+                    window.location.href = submitResult.reviewUri;
                 });
 
             });
@@ -167,36 +175,36 @@ $(function () {
 
     function submitReview(data, tweetUri) {
         return SolidUtils.getStorageRootContainer().then(function (root) {
+            var firstReview = false;
             return SolidUtils.assertLdpc(root.value + "public/twee-fi/").catch(() => {
-                var firstReview = true;
+                firstReview = true;
             }).then(() => {
-                var firstReview = true;
                 return SolidUtils.createPath(root.value + "public",
-                        "twee-fi/" + tweetUri.getUser() + "/" + tweetUri.getStatus()).then(
-                        function (defaultContainer) {
-                            var slug = default_timestamp();
-                            return SolidUtils.fetch(defaultContainer, {
-                                'method': 'POST',
-                                'body': data,
-                                'headers': {
-                                    'Content-Type': 'text/turtle',
-                                    'slug': slug
-                                }
-                            }).then(function (result) {
-                                console.log("Success! Sent payload to designated LDP-URI!");
-                                console.log("Location: " + result.headers.get("Location"));
-                                console.log("Response code: " + result.status);
-                                var reviewUri = SolidUtils.getBaseURI(defaultContainer) + result.headers.get("Location");
-                                return {
-                                    "reviewUri": SolidUtils.getBaseURI(defaultContainer) + result.headers.get("Location"),
-                                    "rootValue": root.value,
-                                    "firstReview": firstReview
-                                };
-                            }).catch(function (err) {
-                                // do something with the error
-                                console.log(err);
-                            });
+                    "twee-fi/" + tweetUri.getUser() + "/" + tweetUri.getStatus()).then(
+                    function (defaultContainer) {
+                        var slug = default_timestamp();
+                        return SolidUtils.fetch(defaultContainer, {
+                            'method': 'POST',
+                            'body': data,
+                            'headers': {
+                                'Content-Type': 'text/turtle',
+                                'slug': slug
+                            }
+                        }).then(function (result) {
+                            console.log("Success! Sent payload to designated LDP-URI!");
+                            console.log("Location: " + result.headers.get("Location"));
+                            console.log("Response code: " + result.status);
+                            var reviewUri = SolidUtils.getBaseURI(defaultContainer) + result.headers.get("Location");
+                            return {
+                                "reviewUri": SolidUtils.getBaseURI(defaultContainer) + result.headers.get("Location"),
+                                "rootValue": root.value,
+                                "firstReview": firstReview
+                            };
+                        }).catch(function (err) {
+                            // do something with the error
+                            console.log(err);
                         });
+                    });
             });
         });
     }
