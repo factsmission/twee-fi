@@ -46,8 +46,7 @@ TweeFiUtils = {
                 $("#loginButton").show();
             }
         });
-    },
-
+    }
 };
 
 SolidUtils.postLoginAction = TweeFiUtils.updateLoginInfo; 
