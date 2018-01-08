@@ -81,6 +81,7 @@
                         Display the ClaimReview rating under each tweet.
                     </p>
                     <button onclick="chrome.webstore.install('https://chrome.google.com/webstore/detail/jaighdgohbchfbppacnkcefhhiclbpdb',$('#chromeplugin_card').hide,console.error('Could not install Plugin'))" id="install-button" class="btn btn-primary">Add to Chrome</button>
+                    <!--This won't work on localhost, because inline-installation (this) is only allowed on sites where can be proofed for google that they belong to us (using the google32023aafd9d7f8a0.html file)-->
                 </div>
             </div>
             <!--If other Browsers are supported, add other cards here.-->
@@ -126,6 +127,10 @@
                 $("#invalid_url").removeClass("visible").addClass("invisible");
             });
         });
+
+        if (chrome.app.isInstalled) {
+                $('#chromeplugin_card').hide;
+            }
     </script>
 </body>
 </html>
