@@ -13,6 +13,8 @@
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css" rel="stylesheet">
     <link rel="stylesheet" href="css/twee-fi.css" >
 
+<link rel="chrome-webstore-item" href="https://chrome.google.com/webstore/detail/jaighdgohbchfbppacnkcefhhiclbpdb">
+
 </head>
 
 <body>
@@ -68,10 +70,22 @@
             <a href="https://factsmission.com">FactsMission</a> is a Swiss company
             founded in 2017 with the goal to use Linked Data technologies
             to promote the ability to identify facts and to fight fake news on the web.
+            
+            Factsmission is a member of the <a href="https://www.w3.org/">W3C</a>
 
-            FactsMission is a member of the
-            <a href="https://w3.org">W3C</a>.
-        </p>
+        <div class="card-deck">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Chrome Extension</h5>
+                    <p class="card-text">
+                        Display the ClaimReview rating under each tweet.
+                    </p>
+                    <button onclick="chrome.webstore.install()" id="install-button" class="btn btn-primary">Add to Chrome</button>
+                </div>
+            </div>
+            <!--If other Browsers are supported, add other cards here.-->
+        </div>
+
     </div>
 
     <nav class="navbar navbar-light bg-light invisible">
