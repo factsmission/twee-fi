@@ -4,6 +4,11 @@ body {
   padding-top: 3.5rem;
 }
 
+.twitter-tweet {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
 .starter-bar {
   padding: 2rem .5rem;
   text-align: center;

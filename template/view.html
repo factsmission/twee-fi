@@ -1,21 +1,19 @@
-<div class="review">
-  <div class="row">
-    <div class="col-5">
+<div class="card review my-3">
+  <div class="card-body row">
+    <div class="col-5 py-0 m-0">
       {{{tweetBlockquote}}}
     </div>
     <div class="col-7">
-      <br>
-      <h4>Claim reviewed</h4>
-      {{claim}}
-
-      <br><hr/>
-
-      <h4>Review</h4>
+      <h5 card-title>Claim</h5>
+      <p class="card-text">{{claim}}</p>
+      <hr>
+      <h5 class="card-title">Review</h5>
       {{{stars}}}
-      <br><br>
-      {{review}}
-      <br><br>
-      <a href="{{{uri}}}">Permalink</a> <button class="delete" value="{{uri}}">Delete</button>
+      <p class="card-text">{{review}}</p>
     </div>
   </div>
+    <div class="card-footer text-right">
+      <a class="permalink btn btn-sm btn-primary mr-2" href="{{{uri}}}">Permalink</a>
+      <button class="delete btn btn-sm btn-warning text-white" value="{{uri}}">Delete</button>
+    </div>
 </div>
