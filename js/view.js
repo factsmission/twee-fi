@@ -101,31 +101,27 @@ $(function () {
         if (reviewCount === 0) {
             $("#tweets").append("No reviews! Go review some tweets.");
         }
-        console.log("adding event listner to "+$(".delete").length+" elements");
-        
-        $(".delete").click(e => {
-            var review = $(e.target).closest(".review");
-            var origBG = review.css("background-color");
-            review.addClass("bg-danger text-white");
-            setTimeout(() => { 
-                    if (confirm("Delete "+ review.find(".permalink").attr("href") +" ?")) {
-                        return SolidUtils.fetch(review.find(".permalink").attr("href"), {
-                                method: 'delete'
-                            }).then(response => {
-                                console.log(response);
-                                if (response.ok) {
-                                    review.remove();
-                                } else {
-                                    response.text().then(msg => alert(msg));
-                                }
-                            });
-                    } else {
-                        review.removeClass("bg-danger text-white");
-                    }
-                }, 1);
-        });
     });
-    
-    
-    
 });
+
+function deleteReview(e) {
+    var review = $(e).closest(".review");
+    var origBG = review.css("background-color");
+    review.addClass("bg-danger text-white");
+    setTimeout(() => {
+    if (confirm("Delete " + review.find(".permalink").attr("href") + " ?")) {
+        return SolidUtils.fetch(review.find(".permalink").attr("href"), {
+            method: 'delete'
+        }).then(response => {
+            console.log(response);
+            if (response.ok) {
+                review.remove();
+            } else {
+                response.text().then(msg => alert(msg));
+            }
+        });
+    } else {
+        review.removeClass("bg-danger text-white");
+    }
+    }, 2);
+}
