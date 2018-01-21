@@ -106,7 +106,6 @@ $(function () {
 
 function deleteReview(e) {
     var review = $(e).closest(".review");
-    var origBG = review.css("background-color");
     review.addClass("bg-danger text-white");
     setTimeout(() => {
     if (confirm("Delete " + review.find(".permalink").attr("href") + " ?")) {
