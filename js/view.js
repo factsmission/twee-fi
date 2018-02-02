@@ -28,7 +28,16 @@ $(function () {
             console.error("Coluld not load rating of " + review.value + " : " + error);
         }
 
-        reviewObject.uri = review.value;
+        let uri = review.value;
+
+        reviewObject.uri = uri;
+
+        function fixedEncodeURIComponent(str) {
+            return encodeURIComponent(str).replace(/[!'()*.]/g, function (c) {
+                return '%' + c.charCodeAt(0).toString(16);
+            });
+        }
+        reviewObject.id = fixedEncodeURIComponent(uri.substr(13, uri.indexOf(".ttl")) + 2);
 
         reviewObject.stars = "";
         for (var r = 0; r < reviewObject.rating; r++) {
@@ -36,6 +45,18 @@ $(function () {
         }
         for (r; r < 5; r++) {
             reviewObject.stars += '<i class="fa fa-star-o"></i>';
+        }
+
+        var searchParams = new URLSearchParams(window.location.search);
+        var reviewU = searchParams.get("review");
+        var reviewUf = fixedEncodeURIComponent(reviewU);
+        console.log(reviewUf);
+        if(reviewObject.id === reviewUf) {
+            //$("html, body").animate({ scrollTop: $(encReviewId).offset().top }, 1000);
+            console.log("green!");
+            reviewObject.green = "text-white bg-success";
+        } else {
+            reviewObject.green = "";
         }
 
         return $.ajax({
@@ -54,7 +75,7 @@ $(function () {
                     //var template = document.getElementById('reviewTemplates').innerHTML;
                     if (Object.keys(reviewObject).length > 0) {
                         var output = Mustache.render(template, reviewObject);
-                        $("#tweets").append(output).fadeIn(2000);
+                        $("#tweets").append(output).fadeIn(2000);;
                     }
                 });
             }

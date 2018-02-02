@@ -118,8 +118,21 @@ $(function () {
                 
                 let firstReview = submitResult.firstReview;
                 (firstReview ? showFirstReviewInfo() : showSuccesConfirmation()).then(() => {
-                    console.log("Forwarding to: " + submitResult.reviewUri);
-                    window.location.href = submitResult.reviewUri;
+                    var searchParams = new URLSearchParams(window.location.search);
+                    var target = searchParams.get("target");
+                    if(target) {
+                        console.log("Forwarding to: " + target);
+                        window.location.href = target;
+                    } else {
+                        function fixedEncodeURIComponent(str) {
+                            return encodeURIComponent(str).replace(/[!'()*.]/g, function (c) {
+                                return '%' + c.charCodeAt(0).toString(16);
+                            });
+                        }
+                        var revUri = submitResult.reviewUri.substr(13, submitResult.reviewUri.indexOf(".ttl"));
+                        console.log("Forwarding to: /view.html?review=" + fixedEncodeURIComponent((revUri) + 2));
+                        window.location.href = "/view.html?review=" + fixedEncodeURIComponent((revUri) + 2);
+                    }
                 });
 
             });
