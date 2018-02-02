@@ -50,7 +50,6 @@ $(function () {
         var searchParams = new URLSearchParams(window.location.search);
         var reviewU = searchParams.get("review");
         var reviewUf = fixedEncodeURIComponent(reviewU);
-        console.log(reviewUf);
         if(reviewObject.id === reviewUf) {
             //$("html, body").animate({ scrollTop: $(encReviewId).offset().top }, 1000);
             console.log("green!");
@@ -97,25 +96,29 @@ $(function () {
         {
             return folder.out($rdf.sym("http://www.w3.org/ns/ldp#contains")).each(twitterUser =>
             {
-                return twitterUser.fetch().catch(function (error) {
-                    console.error("Couldn't fetch /" + twitterUser + ": " + error);
-                }).then(twitterUser => {
-                    return twitterUser.out($rdf.sym("http://www.w3.org/ns/ldp#contains")).each(tweet => {
-                        return tweet.fetch().catch(function (error) {
-                            console.error("Couldn't fetch /" + tweet + ": " + error);
-                        }).then(tweet => {
-                            return tweet.out($rdf.sym("http://www.w3.org/ns/ldp#contains")).each(review => {
-                                return review.fetch().catch(function (error) {
-                                    console.error("Couldn't fetch /" + review + ": " + error);
-                                }).then(review => {
-                                    //console.log(twitterUser.value, tweet.value, review.value);
-                                    reviewCount++;
-                                    return drawReview(review);
+                if (twitterUser.value.endsWith("latestReview.txt")) {
+                    console.log("I am happy, lets continue");
+                } else {
+                    return twitterUser.fetch().catch(function (error) {
+                        console.error("Couldn't fetch /" + twitterUser + ": " + error);
+                    }).then(twitterUser => {
+                        return twitterUser.out($rdf.sym("http://www.w3.org/ns/ldp#contains")).each(tweet => {
+                            return tweet.fetch().catch(function (error) {
+                                console.error("Couldn't fetch /" + tweet + ": " + error);
+                            }).then(tweet => {
+                                return tweet.out($rdf.sym("http://www.w3.org/ns/ldp#contains")).each(review => {
+                                    return review.fetch().catch(function (error) {
+                                        console.error("Couldn't fetch /" + review + ": " + error);
+                                    }).then(review => {
+                                        //console.log(twitterUser.value, tweet.value, review.value);
+                                        reviewCount++;
+                                        return drawReview(review);
+                                    });
                                 });
                             });
                         });
                     });
-                });
+                }
             });
         });
     }).then(() => {

@@ -203,23 +203,35 @@ $(function () {
                                 'Content-Type': 'text/turtle',
                                 'slug': slug
                             }
-                        }).then(function (result) {
-                            console.log("Success! Sent payload to designated LDP-URI!");
-                            console.log("Location: " + result.headers.get("Location"));
-                            console.log("Response code: " + result.status);
-                            var reviewUri = SolidUtils.getBaseURI(defaultContainer) + result.headers.get("Location");
-                            return {
-                                "reviewUri": SolidUtils.getBaseURI(defaultContainer) + result.headers.get("Location"),
-                                "rootValue": root.value,
-                                "firstReview": firstReview
-                            };
-                        }).catch(function (err) {
-                            // do something with the error
-                            console.log(err);
+                    }).then(function (result) {
+                        console.log("Success! Sent payload to designated LDP-URI!");
+                        console.log("Location: " + result.headers.get("Location"));
+                        console.log("Response code: " + result.status);
+                        var reviewUri = SolidUtils.getBaseURI(defaultContainer) + result.headers.get("Location");
+                        return {
+                            "reviewUri": SolidUtils.getBaseURI(defaultContainer) + result.headers.get("Location"),
+                            "rootValue": root.value,
+                            "firstReview": firstReview
+                        };
+                    }).catch(function (err) {
+                        // do something with the error
+                        console.log(err);
+                    }).then((postResult) => {
+                        return SolidUtils.fetch(root.value + "public/twee-fi/latestReview.txt", {
+                            'method': 'PUT',
+                            'body': postResult.reviewUri,
+                            'headers': {
+                                'Content-Type': 'text/plain'
+                            }
+                        }).then((putResponse) =>{
+                            if (putResponse.status < 300) {
+                                return postResult;
+                            } else {
+                                console.error("Not able to PUT:" + putResponse.status);
+                            }
                         });
                     });
             });
         });
-    }
-
-});
+    });
+}})
