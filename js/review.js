@@ -115,7 +115,7 @@ $(function () {
                         setTimeout(accept, 5000);
                     });
                 }
-                
+
                 let firstReview = submitResult.firstReview;
                 (firstReview ? showFirstReviewInfo() : showSuccesConfirmation()).then(() => {
                     var searchParams = new URLSearchParams(window.location.search);
@@ -142,7 +142,7 @@ $(function () {
     });
 
     /**
-     * 
+     *
      * @returns {string} The review as N3
      */
     function createReview(tweetUri) {
@@ -217,9 +217,10 @@ $(function () {
                         // do something with the error
                         console.log(err);
                     }).then((postResult) => {
-                        return SolidUtils.fetch(root.value + "public/twee-fi/latestReview.txt", {
+                        var text_body = "<http://twee.fi/onto#latestReview> <https://www.w3.org/TR/void/#inDataset> <" + postResult.reviewUri + "> .\n";
+                        return SolidUtils.fetch(root.value + "public/twee-fi/latestReview.ttl", {
                             'method': 'PUT',
-                            'body': postResult.reviewUri,
+                            'body': text_body,
                             'headers': {
                                 'Content-Type': 'text/plain'
                             }
