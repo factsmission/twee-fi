@@ -38,12 +38,16 @@ TweeFiUtils = {
                     $("#loginName").html("<a class='nav-link' href='" + session.webId + "'>" + name + "</a>");
                     $("#logoutButton").show();
                     $("#loginButton").hide();
+                    $("#not-logged-in").hide();
+                    $("#no-reviews").show();
                 });
             } else {
                 $("#loginInfo").html("Not logged in");
                 $("#loginName").hide();
                 $("#logoutButton").hide();
                 $("#loginButton").show();
+                $("#not-logged-in").show();
+                $("#no-reviews").hide();
             }
         });
     }

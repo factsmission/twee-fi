@@ -122,8 +122,9 @@ $(function () {
             });
         });
     }).then(() => {
+        let noreview = "<div id='no-reviews' class='card border-danger'><div class='card-body text-danger'><h5 class='card-title'>You haven't made any reviews yet!</h5><p class='card-text'>Go review some tweets.</p></div></div>";
         if (reviewCount === 0) {
-            $("#tweets").append("No reviews! Go review some tweets.");
+            $("#tweets").append(noreview);
         }
     });
 });
@@ -148,3 +149,9 @@ function deleteReview(e) {
     }
     }, 2);
 }
+
+$('#loginButton2').on('click', function () {
+    SolidUtils.login().catch(function (error) {
+        console.log("Couldn't log in: " + error);
+    });
+});
