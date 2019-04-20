@@ -6378,14 +6378,17 @@
               Ae.createElement("form", {
                   onSubmit: this.handleSelectIdp(i)
                 },
-                "Please enter your WebID or the URL of your identity provider:",
                 Ae.createElement("div", {
                     className: "form-group"
                   },
+                Ae.createElement("label", {
+                    for: "my-idp-input"
+                  }, "Please enter your WebID or the URL of your identity provider:"),
                   Ae.createElement("div", {
                       className: "input-group"
                     },
                     Ae.createElement("input", {
+                      id: "my-idp-input",
                       class: "form-control",
                       ref: e => this.idpInput = e,
                       type: "url",
@@ -6395,10 +6398,10 @@
                       onBlur: this.handleBlurIdp
                     }),
                     Ae.createElement("div", {
-                        type: "input-group-append"
+                        class: "input-group-append"
                       },
                       Ae.createElement("button", {
-                        class: "btn btn-outline-primary",
+                        class: "btn btn-primary",
                         type: "submit",
                         disabled: !i
                       }, "Login"))))),
@@ -6406,7 +6409,7 @@
                 .createElement("div", {
                   className: "idp-list"
                 }, n.map(e => Ae.createElement("button", {
-                  className: "idp",
+                  class: "idp btn btn-primary btn-block mb-3",
                   onClick: this.handleSelectIdp(e.url),
                   key: e.url
                 }, e.displayName))))
