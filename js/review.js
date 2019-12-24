@@ -95,9 +95,9 @@ $(function () {
                 $("#cr-valid").removeClass("hide").addClass("show");
                 function showFirstReviewInfo() {
                     return new Promise((accept, reject) => {
-                        $("#reviewURI").html(submitResult.rootValue + "publictwee-fi/" + tweetUri.getUser() + "/" + tweetUri.getStatus());
+                        $("#reviewURI").html(submitResult.rootValue + "public/twee-fi/" + tweetUri.getUser() + "/" + tweetUri.getStatus());
                         $("#repoURI").html(submitResult.rootValue);
-                        $("#reviewURI").attr("href", submitResult.rootValue + "publictwee-fi/" + tweetUri.getUser() + "/" + tweetUri.getStatus());
+                        $("#reviewURI").attr("href", submitResult.rootValue + "public/twee-fi/" + tweetUri.getUser() + "/" + tweetUri.getStatus());
                         $("#repoURI").attr("href", submitResult.rootValue);
                         $("#firsttime").removeClass("invisible").addClass("visible");
 
